@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Inkless</string>
+
+    <!--String de Sign Up -->
+    <string name="signUp_titre">اختر نوع الحساب</string>
+    <string name="signUp_writer">كــاتب</string>
+    <string name="signUp_reader">قــارىء</string>
+    <string name="signUp_narrator">راوي</string>
+    <string name="signUp_username">اسم المستخدم</string>
+    <string name="signUp_mdp">كلمة السر</string>
+    <string name="signUp_confirm_mdp">تـأكيد كلمة السر</string>
+    <string name="signUp_email">البريد الالكتروني</string>
+    <string name="signUp_ccp">  ء ccp رقم الحساب البريدي</string>
+    <string name="signUp_nation">البلد</string>
+    <string name="signUp_valider">تسجيل</string>
+    <string name="signUp_validerType">التـالي</string>
+    <string name="signUp_succ">تم التسجيل بنجاح.</string>
+    <string name="signUp_email_err">ان هدا الايمايل موجود لدى مستخدم آخر.</string>
+
+    <!--String de Login -->
+    <string name="login_email">اسم المستخدم</string>
+    <string name="login_mdp">كلمة السر</string>
+    <string name="login_enterButt">دخول</string>
+    <string name="login_titre">تسجيل الدخول</string>
+    <string name="login_signUpTitre">ادا لا تمتلك حساب </string>
+
+    <string name="login_mdp_errRemplisage">ادخل كل البيانات.</string>
+    <string name="login_signUpButt">  سجل من هنا</string>
+    <string name="login_email_err">ان هدا الايمايل خاطىء.</string>
+    <string name="login_mdp_err">كلمة السر خاطئة.</string>
+
+
+</resources>
