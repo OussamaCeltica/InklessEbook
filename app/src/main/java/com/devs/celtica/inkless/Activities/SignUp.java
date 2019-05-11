@@ -1,11 +1,10 @@
-package com.devs.celtica.inkless;
+package com.devs.celtica.inkless.Activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,16 +15,27 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.HashMap;
+import com.devs.celtica.inkless.R;
+import com.devs.celtica.inkless.Users.Narrator;
+import com.devs.celtica.inkless.Users.ReaderFull;
+import com.devs.celtica.inkless.Users.Writer;
+
+import java.util.ArrayList;
+
+import in.galaxyofandroid.spinerdialog.OnSpinerItemClick;
+import in.galaxyofandroid.spinerdialog.SpinnerDialog;
 
 public class SignUp extends AppCompatActivity {
     RadioGroup type_user;
     RadioButton reader,writer,narrator;
     EditText username,email,mdp,confirmMdp,ccp;
-    TextView nation;
+    TextView nation,typeUserLabel;
     LinearLayout div_ccp,div_type_user;
     ScrollView div_insc;
     ProgressDialog progress;
+    SpinnerDialog spinnerNations;
+    public static boolean inscTerminé=false;
+    public static boolean isOnSend=false;//pour que le user n envoie pas de sign up au meme temps
 
     RadioButton type_userChecked;
     @Override
@@ -51,14 +61,38 @@ public class SignUp extends AppCompatActivity {
             div_insc=((ScrollView)findViewById(R.id.div_insc_form));
             div_ccp=((LinearLayout)findViewById(R.id.signUp_divCCP));
             type_userChecked=reader;
+            typeUserLabel=((TextView)findViewById(R.id.signUp_insc_type));
+            typeUserLabel.setText(getResources().getString(R.string.signUp_reader));
 
-            //region input form insc
+
+            //region les input de formulaire  d'inscription ..
             username=(EditText)findViewById(R.id.signUp_insc_username);
             email=(EditText)findViewById(R.id.signUp_insc_email);
             mdp=(EditText)findViewById(R.id.signUp_insc_mdp);
             confirmMdp=(EditText)findViewById(R.id.signUp_insc_confirmMdp);
             ccp=(EditText)findViewById(R.id.signUp_insc_ccp);
-            nation=(TextView)findViewById(R.id.signUp_insc_confirmMdp);
+            nation=(TextView)findViewById(R.id.signUp_insc_nation);
+
+
+            final ArrayList<String> nations=new  ArrayList<String> ();
+            for (String nation:getResources().getStringArray(R.array.nations_array)){
+                nations.add(nation);
+            }
+            spinnerNations=new SpinnerDialog(SignUp.this,nations,getResources().getString(R.string.signUp_nationChoose),"Close");// With No Animation
+            spinnerNations.bindOnSpinerListener(new OnSpinerItemClick() {
+                @Override
+                public void onClick(String s, int i) {
+                    nation.setText(s+"");
+                }
+            });
+            nation.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    spinnerNations.showSpinerDialog();
+
+                }
+            });
             //endregion
 
             //region change check type user
@@ -66,6 +100,7 @@ public class SignUp extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     reader.setChecked(true);
+                    typeUserLabel.setText(getResources().getString(R.string.signUp_reader));
                 }
             });
 
@@ -73,6 +108,7 @@ public class SignUp extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     writer.setChecked(true);
+                    typeUserLabel.setText(getResources().getString(R.string.signUp_writer));
                 }
             });
 
@@ -80,13 +116,16 @@ public class SignUp extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     narrator.setChecked(true);
+                    typeUserLabel.setText(getResources().getString(R.string.signUp_narrator));
                 }
             });
 
             type_user.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup radioGroup, int i) {
+
                     type_userChecked=(RadioButton)findViewById(radioGroup.getCheckedRadioButtonId());
+
                 }
             });
             //endregion
@@ -123,16 +162,34 @@ public class SignUp extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     if(username.getText().toString().equals("") || email.getText().toString().equals("") || mdp.getText().toString().equals("") || confirmMdp.getText().toString().equals("") || nation.getText().toString().equals("") || (type_userChecked!=reader && ccp.getText().toString().equals(""))){
-
+                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.signUp_errRemplisage),Toast.LENGTH_SHORT).show();
                     }else {
+                        if(!mdp.getText().toString().equals(confirmMdp.getText().toString())){
+                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.signUp_confirmMdpErr),Toast.LENGTH_SHORT).show();
+                        }else {
+                            if (!isOnSend) {
+                                isOnSend = true;
+                                if (type_userChecked == reader) {
+                                    new ReaderFull(5, username.getText().toString(), "", email.getText().toString(), mdp.getText().toString(), nation.getText().toString(), "").signUp(SignUp.this);
+                                } else if (type_userChecked == writer) {
+                                    new Writer(5, username.getText().toString(), "", email.getText().toString(), mdp.getText().toString(), nation.getText().toString(), "", ccp.getText().toString()).signUp(SignUp.this);
+                                } else {
+                                    new Narrator(5, username.getText().toString(), "", email.getText().toString(), mdp.getText().toString(), nation.getText().toString(), "", ccp.getText().toString()).signUp(SignUp.this);
+                                }
+                            }
+                        }
+
+
+                        /*
                         final HashMap<String,String> data =new HashMap<String,String> ();
 
                         data.put("request","inscription");
                         data.put("username",username.getText().toString());
                         data.put("mdp",mdp.getText().toString());
                         data.put("email",email.getText().toString());
-                        //data.put("phone",.getText().toString());
                         data.put("nation",nation.getText().toString()+"");
+                        //data.put("phone",.getText().toString());
+
                         if (type_userChecked==reader){
                             data.put("type_user","reader");
                         }else if(type_userChecked==writer){
@@ -183,6 +240,7 @@ public class SignUp extends AppCompatActivity {
 
                             }
                         });
+                        */
                     }
 
 
@@ -204,5 +262,33 @@ public class SignUp extends AppCompatActivity {
         //endregion
     }
 
-
+    @Override
+    public void onBackPressed() {
+        if (isOnSend){
+            finish();
+        }else {
+            if (div_insc.getVisibility()== View.VISIBLE) {
+                div_insc.animate()
+                        .setDuration(500)
+                        .alpha(0)
+                        .start();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        div_insc.setVisibility(View.GONE);
+                        div_type_user.setVisibility(View.VISIBLE);
+                        if (type_userChecked == reader) {
+                            div_ccp.setVisibility(View.GONE);
+                        }
+                        div_type_user.animate()
+                                .setDuration(500)
+                                .alpha(1)
+                                .start();
+                    }
+                }, 520);
+            }else {
+                super.onBackPressed();
+            }
+        }
+    }
 }

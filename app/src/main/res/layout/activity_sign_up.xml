@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:background="@drawable/bg"
     android:gravity="center"
-    tools:context="com.devs.celtica.inkless.SignUp">
+    tools:context="com.devs.celtica.inkless.Activities.SignUp">
 
 
     <LinearLayout
@@ -373,7 +373,7 @@
                                 android:layout_width="30dp"
                                 android:layout_height="match_parent"
                                 android:padding="4dp"
-                                android:src="@drawable/login_mdp"/>
+                                android:src="@drawable/email"/>
 
                             <TextView
                                 android:layout_width="1dp"
@@ -411,7 +411,7 @@
                                 android:layout_width="30dp"
                                 android:layout_height="match_parent"
                                 android:padding="4dp"
-                                android:src="@drawable/login_mdp"/>
+                                android:src="@drawable/ccp"/>
 
                             <TextView
                                 android:layout_width="1dp"
@@ -448,7 +448,7 @@
                                 android:layout_width="30dp"
                                 android:layout_height="match_parent"
                                 android:padding="4dp"
-                                android:src="@drawable/login_mdp"/>
+                                android:src="@drawable/nation"/>
 
                             <TextView
                                 android:layout_width="1dp"

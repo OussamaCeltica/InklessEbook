@@ -1,9 +1,10 @@
-package com.devs.celtica.inkless;
+package com.devs.celtica.inkless.Activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+
+import com.devs.celtica.inkless.R;
 
 public class Accueil extends AppCompatActivity {
 
