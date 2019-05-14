@@ -6,13 +6,19 @@
 package com.devs.celtica.inkless.Users;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.devs.celtica.inkless.Activities.Accueil;
 import com.devs.celtica.inkless.Activities.Login;
 import com.devs.celtica.inkless.PostServerRequest5;
+import com.devs.celtica.inkless.Publications.TypeFiles;
 import com.devs.celtica.inkless.R;
 import com.devs.celtica.inkless.Activities.SignUp;
 
@@ -21,6 +27,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+
+import static android.bluetooth.BluetoothClass.Service.AUDIO;
 
 /**
  *
@@ -115,23 +123,7 @@ public class User {
         HashMap<String,String> data =new HashMap<String,String> ();
         data.put("email",email);
         Login.ajax.setUrlRead("/read.php");
-        Login.ajax.read(" select u.*,contrat_reader.date_contract_reader,contrat_narrattor.date_contract_narrator,contrat_writer.date_contract_writer\n" +
-                "from (SELECT user.*,reader_full.*,writer.id_writer,writer.ccp as writer_ccp,narrator.id_narrator,narrator.ccp as narrator_ccp from user left join reader_full on user.id_user=reader_full.id_reader LEFT JOIN writer on user.id_user=writer.id_writer LEFT JOIN narrator ON user.id_user=narrator.id_narrator) as u\n" +
-                "LEFT JOIN\n" +
-                "        (select id_user as id_reader,DATEDIFF(date_fin_contrat,NOW()) as date_contract_reader from \n" +
-                "         contract where type='reader'   order by date_contract desc) as contrat_reader on  \n" +
-                "         u.id_user=contrat_reader.id_reader \n" +
-                "         left join\n" +
-                "                  (select id_user as id_writer ,DATEDIFF(date_fin_contrat,NOW()) as date_contract_writer\n" +
-                "                   from contract where type='writer'   order by date_contract desc) as contrat_writer \n" +
-                "                   on contrat_reader.id_reader=contrat_writer.id_writer\n" +
-                "                   left join\n" +
-                "\n" +
-                "                          (select id_user as id_narrator,DATEDIFF(date_fin_contrat,NOW()) as \n" +
-                "                           date_contract_narrator\n" +
-                "                           from contract where type='narrator'   order by date_contract desc) as \n" +
-                "                           contrat_narrattor on contrat_narrattor.id_narrator=contrat_writer.id_writer where \n" +
-                "  u.email=?", data, new PostServerRequest5.doBeforAndAfterGettingData() {
+        Login.ajax.read("select * from user where  email=?", data, new PostServerRequest5.doBeforAndAfterGettingData() {
             @Override
             public void before() {
                 progress.setTitle("جاري البحث ..");
@@ -148,59 +140,147 @@ public class User {
 
             @Override
             public void After(String result) {
-                progress.dismiss();
 
                 try {
                     JSONArray r=new JSONArray(result);
 
+                    //region email erreur ..
                     if(r.length() == 0){
                         c.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                progress.dismiss();
                                 Toast.makeText(c.getApplicationContext(),c.getResources().getString(R.string.login_email_err),Toast.LENGTH_SHORT).show();
                             }
                         });
 
-                    }else {
+                    }
+                    //endregion
+
+                    else {
+                        //region mot de passe err ..
                         JSONObject user=r.getJSONObject(0);
                         if(!user.getString("mdp").equals(mdp)){
                             c.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    progress.dismiss();
                                     Toast.makeText(c,c.getResources().getString(R.string.login_mdp_err),Toast.LENGTH_SHORT).show();
                                 }
                             });
 
-                        }else {
-
-                            //region testé si le user est un writter ou reader ..
-                            if (!user.getString("id_writer").equals("null")){
-                                Login.reader=new Writer(user.getInt("id_writer"),user.getString("nom")+"","",user.getString("nom")+"",user.getString("mdp")+"","","",user.getString("writer_ccp"));
-                                if(user.getString("date_contract_writer").equals("null") && user.getInt("date_contract_writer")>0){
-                                    ((Writer)Login.reader).contrat_writer_valide=true;
-                                }
-                            }else {
-                                if (!user.getString("id_reader").equals("null")){
-                                    Login.reader=new ReaderFull(user.getInt("id_reader"),user.getString("nom")+"","",user.getString("nom")+"",user.getString("mdp")+"","","");
-                                    if(!user.getString("date_contract_reader").equals("null") && user.getInt("date_contract_reader")>0){
-                                        Login.reader.contrat_reader_valide=true;
-                                    }
-                                }
-                            }
-                            //endregion
-
-                            //region testé si le user est un narrator
-                            if (!user.getString("id_narrator").equals("null")){
-                                Login.narrator=new Narrator(user.getInt("id_narrator"),user.getString("nom")+"","",user.getString("nom")+"",user.getString("mdp")+"","","",user.getString("narrator_ccp"));
-                                if(!user.getString("date_contract_narrator").equals("null") && user.getInt("date_contract_narrator")>0){
-                                    Login.reader.contrat_reader_valide=true;
-                                }
-                            }
-                            //endregion
-
-                            c.startActivity(new Intent(c,Accueil.class));
-                            c.finish();
                         }
+                        //endregion
+
+                        //region récupére le type user et son contrat ..
+                        else {
+
+                            HashMap<String,String> data=new HashMap<String,String>();
+                            data.put("1",user.getString("id_user"));
+                            data.put("2",user.getString("id_user"));
+                            data.put("3",user.getString("id_user"));
+                            data.put("4",user.getString("id_user"));
+                            Login.ajax.read("SELECT u.*, \n" +
+                                    "       c_r.licence_reader, \n" +
+                                    "       c_w.licence_writer, \n" +
+                                    "       licence_narrator \n" +
+                                    "FROM   ( (SELECT uu.*, \n" +
+                                    "               r.id_reader, \n" +
+                                    "               nar.id_narrator, \n" +
+                                    "               nar.ccp AS narrator_ccp, \n" +
+                                    "               wr.id_writer, \n" +
+                                    "               wr.ccp  AS writer_ccp \n" +
+                                    "        FROM   user uu \n" +
+                                    "               LEFT JOIN reader_full r \n" +
+                                    "                      ON uu.id_user = r.id_reader \n" +
+                                    "               LEFT JOIN writer wr \n" +
+                                    "                      ON uu.id_user = wr.id_writer \n" +
+                                    "               LEFT JOIN narrator nar \n" +
+                                    "                      ON uu.id_user = nar.id_narrator \n" +
+                                    "        WHERE  id_user = ?) AS u \n" +
+                                    "         LEFT JOIN(SELECT id_user                           AS id_reader, \n" +
+                                    "                          Datediff(date_fin_contrat, Now()) AS licence_reader \n" +
+                                    "                   FROM   contract \n" +
+                                    "                   WHERE  type = 'reader' \n" +
+                                    "                          AND id_user = ? \n" +
+                                    "                   ORDER  BY id_contrat DESC \n" +
+                                    "                   LIMIT  1) AS c_r \n" +
+                                    "                ON c_r.id_reader = u.id_user \n" +
+                                    "         LEFT JOIN(SELECT id_user                           AS id_writer, \n" +
+                                    "                          Datediff(date_fin_contrat, Now()) AS licence_writer \n" +
+                                    "                   FROM   contract \n" +
+                                    "                   WHERE  type = 'writer' \n" +
+                                    "                          AND id_user = ? \n" +
+                                    "                   ORDER  BY id_contrat DESC \n" +
+                                    "                   LIMIT  1) AS c_w \n" +
+                                    "                ON c_w.id_writer = u.id_user \n" +
+                                    "         LEFT JOIN(SELECT id_user                           AS id_narrator, \n" +
+                                    "                          Datediff(date_fin_contrat, Now()) AS licence_narrator \n" +
+                                    "                   FROM   contract \n" +
+                                    "                   WHERE  type = 'narrator' \n" +
+                                    "                          AND id_user = ? \n" +
+                                    "                   ORDER  BY id_contrat DESC \n" +
+                                    "                   LIMIT  1) AS c_n \n" +
+                                    "                ON c_n.id_narrator = u.id_user ) ",data, new PostServerRequest5.doBeforAndAfterGettingData() {
+                                @Override
+                                public void before() {
+
+                                }
+
+                                @Override
+                                public void echec(Exception e) {
+                                    progress.dismiss();
+                                }
+
+                                @Override
+                                public void After(String result) {
+                                    Log.e("rrr",result+"");
+                                    progress.dismiss();
+
+                                    try {
+                                        JSONArray r = new JSONArray(result);
+                                        JSONObject user=r.getJSONObject(0);
+
+                                        //region testé si le user est un writter ou reader ..
+                                        if (!user.getString("id_writer").equals("null")){
+                                            Login.reader=new Writer(user.getInt("id_writer"),user.getString("nom")+"","",user.getString("nom")+"",user.getString("mdp")+"","","",user.getString("writer_ccp"));
+                                            if(!user.getString("licence_writer").equals("null") && user.getInt("licence_writer")>0){
+                                                ((Writer)Login.reader).contrat_writer_valide=true;
+                                            }
+                                        }else {
+                                            if (!user.getString("id_reader").equals("null")){
+                                                Login.reader=new ReaderFull(user.getInt("id_reader"),user.getString("nom")+"","",user.getString("nom")+"",user.getString("mdp")+"","","");
+                                                if(!user.getString("licence_reader").equals("null") && user.getInt("licence_reader")>0){
+                                                    Login.reader.contrat_reader_valide=true;
+                                                }
+                                            }
+                                        }
+                                        //endregion
+
+                                        //region testé si le user est un narrator
+                                        if (!user.getString("id_narrator").equals("null")){
+                                            Login.narrator=new Narrator(user.getInt("id_narrator"),user.getString("nom")+"","",user.getString("nom")+"",user.getString("mdp")+"","","",user.getString("narrator_ccp"));
+                                            if(!user.getString("licence_narrator").equals("null") && user.getInt("licence_narrator")>0){
+                                                Login.reader.contrat_reader_valide=true;
+                                            }
+                                        }
+                                        //endregion
+
+                                        c.startActivity(new Intent(c,Profile.class));
+                                        c.finish();
+
+                                    }catch (JSONException e){
+                                        e.printStackTrace();
+
+                                    }
+
+
+
+
+                                }
+                            });
+                        }
+                        //endregion
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -217,5 +297,50 @@ public class User {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         c.startActivity(intent);
         //endregion
+    }
+
+    public void openSelectFile(AppCompatActivity c,TypeFiles type_file){
+
+        switch (type_file){
+            case  PDF:{
+                Intent i2=new Intent();
+                i2.setType("application/pdf");
+                i2.setAction(Intent.ACTION_GET_CONTENT);
+                c.startActivityForResult(i2,2);
+            }
+            break;
+            case AUDIO:{
+
+            }break;
+            case PHOTO:{
+                Intent i2=new Intent();
+                i2.setType("image/*");
+                i2.setAction(Intent.ACTION_GET_CONTENT);
+                c.startActivityForResult(i2,1);
+            }
+            break;
+        }
+
+    }
+
+    public  String getFilePath(Context context, Uri uri) {
+
+        Cursor cursor = null;
+        final String[] projection = {
+                MediaStore.MediaColumns.DISPLAY_NAME
+        };
+
+        try {
+            cursor = context.getContentResolver().query(uri, projection, null, null,
+                    null);
+            if (cursor != null && cursor.moveToFirst()) {
+                final int index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME);
+                return cursor.getString(index);
+            }
+        } finally {
+            if (cursor != null)
+                cursor.close();
+        }
+        return null;
     }
 }

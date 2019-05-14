@@ -1,7 +1,13 @@
 package com.devs.celtica.inkless.Users;
 
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 
+import com.devs.celtica.inkless.Activities.Login;
+import com.devs.celtica.inkless.PostServerRequest5;
+
+import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Writer extends ReaderFull{
@@ -22,6 +28,27 @@ public class Writer extends ReaderFull{
         data.put("ccp",ccp);
 
         sendUserINfosToServer(c,data);
+    }
+
+    public void uploadBook(AppCompatActivity c){
+        HashMap<String,String> data= getHashmapUserInfos ();
+        ArrayList<Uri> files=new ArrayList<Uri>();
+        Login.ajax.sendWithFiles(data, files, c, new PostServerRequest5.doBeforAndAfterGettingData() {
+            @Override
+            public void before() {
+
+            }
+
+            @Override
+            public void echec(Exception e) {
+
+            }
+
+            @Override
+            public void After(String result) {
+
+            }
+        });
     }
     
 }

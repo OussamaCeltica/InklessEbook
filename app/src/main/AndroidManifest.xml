@@ -19,7 +19,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activities.SignUp" />
-        <activity android:name=".Activities.Accueil"></activity>
+        <activity android:name=".Activities.Accueil" />
+        <activity android:name=".UploadPdf" />
+        <activity android:name=".Users.Profile"></activity>
     </application>
 
 </manifest>

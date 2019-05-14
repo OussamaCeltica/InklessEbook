@@ -37,6 +37,37 @@
     <string name="login_email_err">ان هدا الايمايل خاطىء.</string>
     <string name="login_mdp_err">كلمة السر خاطئة.</string>
 
+    <!--String de upload pdf -->
+    <string name="uploadBook_upload">رفع</string>
+    <string name="uploadBook_resume">1.مقدمة الكتاب لوحدها</string>
+    <string name="uploadBook_pdfComplet">2.الكتاب كاملا</string>
+
+    <string name="uploadBook_titre1">. العنوان</string>
+    <string name="uploadBook_titre2">. العنوان الثاني</string>
+    <string name="uploadBook_photo">. صورة الغلاف</string>
+
+    <string name="uploadBook_desc">اضافة وصف للكتاب ..</string>
+    <string name="uploadBook_next">التـالي</string>
+
+    <string name="uploadBook_hasPaper">اتوفر على النسخة الورقية </string>
+    <string name="uploadBook_prixPaper">سعر النسخة الورقية</string>
+    <string name="uploadBook_prixPdf">سعر النسخة الالكترونية</string>
+    <string name="uploadBook_maisonEdition">اسم دار النشر</string>
+    <string name="uploadBook_isbn">رقم ISBN</string>
+    <string name="uploadBook_valider">انشر كتابي</string>
+
+    <!--String de profile -->
+    <string name="profile_user">حسابي</string>
+    <string name="profile_bestSel">الاعلى مبيعا</string>
+    <string name="profile_search">بحث</string>
+    <string name="profile_saves">التسجيلات</string>
+    <string name="profile_home">الرئيسية</string>
+
+    <string name="profile_statButt">الاحصائيات</string>
+    <string name="profile_configButt">تعديل</string>
+    <string name="profile_uploadButt">رفع ملف جديد</string>
+
+
 
     <!--String des Nations -->
     <string-array name="nations_array">
