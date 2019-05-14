@@ -1,0 +1,183 @@
+package com.devs.celtica.inkless;
+
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Handler;
+import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+
+import com.devs.celtica.inkless.Activities.Login;
+import com.devs.celtica.inkless.Publications.BookFiles;
+import com.devs.celtica.inkless.Publications.TypeFiles;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class UploadPdf extends AppCompatActivity {
+    TextView resumeButt,bookButt,photoButt;
+    BookFiles request;
+    ScrollView form1;
+    LinearLayout form2;
+    CheckBox hasPaperVersion;
+    EditText prixPaper,prixPdf,maisonEdition,isbn;
+    boolean isSended=false,isForm1=true;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_upload_pdf);
+
+        if (savedInstanceState != null) {
+            //region Revenir a au Login ..
+            Intent intent = new Intent(getApplicationContext(), Login.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            //endregion
+        }else {
+
+            resumeButt = (TextView) findViewById(R.id.uploadPdf_resumeButt);
+            bookButt = (TextView) findViewById(R.id.uploadPdf_bookButt);
+            photoButt = (TextView) findViewById(R.id.uploadPdf_photoButt);
+            form1 = (ScrollView) findViewById(R.id.uploadPdf_form1);
+            form2 = (LinearLayout) findViewById(R.id.uploadPdf_form2);
+            hasPaperVersion = (CheckBox) findViewById(R.id.uploadPdf_hasPdfPaper);
+            prixPaper = (EditText) findViewById(R.id.uploadPdf_prixPaper);
+            prixPdf = (EditText) findViewById(R.id.uploadPdf_prixPdf);
+            maisonEdition = (EditText) findViewById(R.id.uploadPdf_maisonEdition);
+            isbn = (EditText) findViewById(R.id.uploadPdf_isbn);
+
+
+            //region uploadResumePdf ..
+            resumeButt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Login.reader.openSelectFile(UploadPdf.this, TypeFiles.PDF);
+                    request = BookFiles.RESUME;
+                }
+            });
+            //endregion
+
+            //region uploadCompletePdf ..
+            bookButt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Login.reader.openSelectFile(UploadPdf.this, TypeFiles.PDF);
+                    request = BookFiles.BOOK_COMPLET;
+                }
+            });
+            //endregion
+
+            //region photo Book ..
+            photoButt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Login.reader.openSelectFile(UploadPdf.this, TypeFiles.PHOTO);
+                    request = BookFiles.PHOTO;
+                }
+            });
+            //endregion
+
+            //region valider form 1 ..
+            ((Button) findViewById(R.id.uploadPdf_nextButt)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    isForm1=false;
+                    form1.animate()
+                            .setDuration(500)
+                            .alpha(0)
+                            .start();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            form1.setVisibility(View.GONE);
+                            form2.setVisibility(View.VISIBLE);
+
+                            form2.animate()
+                                    .setDuration(500)
+                                    .alpha(1)
+                                    .start();
+                        }
+                    }, 520);
+                }
+            });
+            //endregion
+
+            //region publier le book ..
+            ((TextView)findViewById(R.id.uploadPdf_publier)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    HashMap<String,String> data=new HashMap<String,String>();
+                    ArrayList<Uri> files=new ArrayList<Uri>();
+                    //data.put("writer",Login.reader.id_user+"");
+
+                }
+            });
+            //endregion
+
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK){
+            Uri file=data.getData();
+            switch (request){
+                case RESUME:{
+                    resumeButt.setText(Login.reader.getFilePath(getApplicationContext(),file));
+                }break;
+                case BOOK_COMPLET:{
+                    bookButt.setText(Login.reader.getFilePath(getApplicationContext(),file));
+                }
+                break;
+                case PHOTO:{
+                    photoButt.setText(Login.reader.getFilePath(getApplicationContext(),file));
+                }
+            }
+
+
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(!isSended){
+            if (!isForm1) {
+                isForm1=true;
+                form2.animate()
+                        .setDuration(500)
+                        .alpha(0)
+                        .start();
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        form2.setVisibility(View.GONE);
+                        form1.setVisibility(View.VISIBLE);
+
+                        form1.animate()
+                                .setDuration(500)
+                                .alpha(1)
+                                .start();
+                    }
+                }, 520);
+            }else {
+                super.onBackPressed();
+            }
+        }else {
+            super.onBackPressed();
+        }
+    }
+}
