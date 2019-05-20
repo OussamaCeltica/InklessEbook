@@ -21,11 +21,13 @@ import com.devs.celtica.inkless.PostServerRequest5;
 import com.devs.celtica.inkless.Publications.TypeFiles;
 import com.devs.celtica.inkless.R;
 import com.devs.celtica.inkless.Activities.SignUp;
+import com.devs.celtica.inkless.Sha1;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
 import static android.bluetooth.BluetoothClass.Service.AUDIO;
@@ -160,7 +162,7 @@ public class User {
                     else {
                         //region mot de passe err ..
                         JSONObject user=r.getJSONObject(0);
-                        if(!user.getString("mdp").equals(mdp)){
+                        if(!user.getString("mdp").equals(Sha1.hash(mdp))){
                             c.runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -283,6 +285,8 @@ public class User {
                         //endregion
                     }
                 } catch (JSONException e) {
+                    e.printStackTrace();
+                } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
                 }
 

@@ -6,5 +6,4 @@ package com.devs.celtica.inkless.Publications;
 
 public enum TypeFiles {
       PHOTO,PDF,AUDIO
-
 }

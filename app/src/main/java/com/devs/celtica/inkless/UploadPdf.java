@@ -18,6 +18,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.devs.celtica.inkless.Activities.Login;
+import com.devs.celtica.inkless.Publications.Book;
 import com.devs.celtica.inkless.Publications.BookFiles;
 import com.devs.celtica.inkless.Publications.TypeFiles;
 
@@ -31,8 +32,9 @@ public class UploadPdf extends AppCompatActivity {
     ScrollView form1;
     LinearLayout form2;
     CheckBox hasPaperVersion;
-    EditText prixPaper,prixPdf,maisonEdition,isbn;
+    EditText titre1,titre2,prixPaper,prixPdf,maisonEdition,isbn,decription;
     boolean isSended=false,isForm1=true;
+    ArrayList<Uri> files=new ArrayList<Uri>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +54,17 @@ public class UploadPdf extends AppCompatActivity {
             photoButt = (TextView) findViewById(R.id.uploadPdf_photoButt);
             form1 = (ScrollView) findViewById(R.id.uploadPdf_form1);
             form2 = (LinearLayout) findViewById(R.id.uploadPdf_form2);
+
+            //region infos book ..
+            titre1=(EditText)findViewById(R.id.uploadPdf_titre1);
+            titre2=(EditText)findViewById(R.id.uploadPdf_titre2);
             hasPaperVersion = (CheckBox) findViewById(R.id.uploadPdf_hasPdfPaper);
             prixPaper = (EditText) findViewById(R.id.uploadPdf_prixPaper);
             prixPdf = (EditText) findViewById(R.id.uploadPdf_prixPdf);
             maisonEdition = (EditText) findViewById(R.id.uploadPdf_maisonEdition);
             isbn = (EditText) findViewById(R.id.uploadPdf_isbn);
+            decription=((EditText)findViewById(R.id.uploadPdf_bookDesc));
+            //endregion
 
 
             //region uploadResumePdf ..
@@ -118,9 +126,13 @@ public class UploadPdf extends AppCompatActivity {
             ((TextView)findViewById(R.id.uploadPdf_publier)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    HashMap<String,String> data=new HashMap<String,String>();
-                    ArrayList<Uri> files=new ArrayList<Uri>();
-                    //data.put("writer",Login.reader.id_user+"");
+
+                if(true){
+
+                }else {
+                    Book b=new Book(maisonEdition.getText().toString()+"",titre1.getText().toString()+"",titre2.getText().toString()+"",isbn.getText().toString()+"",decription.getText().toString()+"",hasPaperVersion.isChecked(),Double.parseDouble(prixPaper.getText().toString()),Double.parseDouble(prixPdf.getText().toString()));
+                    b.uploadBook(UploadPdf.this,files);
+                }
 
                 }
             });
@@ -138,13 +150,16 @@ public class UploadPdf extends AppCompatActivity {
             switch (request){
                 case RESUME:{
                     resumeButt.setText(Login.reader.getFilePath(getApplicationContext(),file));
+                    files.add(0,file);
                 }break;
                 case BOOK_COMPLET:{
                     bookButt.setText(Login.reader.getFilePath(getApplicationContext(),file));
+                    files.add(1,file);
                 }
                 break;
                 case PHOTO:{
                     photoButt.setText(Login.reader.getFilePath(getApplicationContext(),file));
+                    files.add(2,file);
                 }
             }
 

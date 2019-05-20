@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,9 +13,12 @@ import android.widget.Toast;
 
 import com.devs.celtica.inkless.PostServerRequest5;
 import com.devs.celtica.inkless.R;
+import com.devs.celtica.inkless.Sha1;
 import com.devs.celtica.inkless.Users.Narrator;
 import com.devs.celtica.inkless.Users.ReaderFull;
 import com.devs.celtica.inkless.Users.User;
+
+import java.security.NoSuchAlgorithmException;
 
 public class Login extends AppCompatActivity {
     private EditText email,mdp;
@@ -35,6 +39,12 @@ public class Login extends AppCompatActivity {
 
         email=(EditText)findViewById(R.id.login_email);
         mdp=(EditText)findViewById(R.id.login_mdp);
+
+        try {
+            Log.e("sss", Sha1.hash("ouss0900"));
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
 
 
         //region connecter ..

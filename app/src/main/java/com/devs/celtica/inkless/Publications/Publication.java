@@ -14,6 +14,10 @@ public class Publication {
         this.lien = lien;
     }
 
+    public Publication(){
+
+    }
+
 
     
     

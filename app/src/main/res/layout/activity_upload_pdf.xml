@@ -158,7 +158,7 @@
                                 android:layout_height="match_parent"
                                 android:background="@color/Gray"/>
                             <EditText
-                                android:id="@+id/signUp_insc_username"
+                                android:id="@+id/uploadPdf_titre1"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:minHeight="40dp"
@@ -199,7 +199,7 @@
                                 android:layout_height="match_parent"
                                 android:background="@color/Gray"/>
                             <EditText
-                                android:id="@+id/ffbf"
+                                android:id="@+id/uploadPdf_titre2"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:minHeight="40dp"
@@ -282,7 +282,7 @@
 
 
                             <EditText
-                                android:id="@+id/signUp_insdvdc_username"
+                                android:id="@+id/uploadPdf_bookDesc"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:minHeight="90dp"

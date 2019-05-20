@@ -66,7 +66,15 @@
     <string name="profile_statButt">الاحصائيات</string>
     <string name="profile_configButt">تعديل</string>
     <string name="profile_uploadButt">رفع ملف جديد</string>
-
+    <string name="profileBook_addToList">اضافة الى القائمة</string>
+    <string name="profileBook_save">تسجيل</string>
+    <string name="profileBook_download">تحميل</string>
+    <string name="profileBook_hear">استمع</string>
+    <string name="profileBook_read">اقرأ</string>
+    <string name="profileBook_buy">اشتري</string>
+    <string name="profileBook_rating">التقييم:</string>
+    <string name="profileBook_dateEdition">تاريخ الاصدار:</string>
+    <string name="profileBook_edition">الناشر:</string>
 
 
     <!--String des Nations -->

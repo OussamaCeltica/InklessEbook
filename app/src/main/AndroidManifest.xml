@@ -6,9 +6,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/inkless_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/inkless_icon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Activities.Login">
@@ -21,7 +21,8 @@
         <activity android:name=".Activities.SignUp" />
         <activity android:name=".Activities.Accueil" />
         <activity android:name=".UploadPdf" />
-        <activity android:name=".Users.Profile"></activity>
+        <activity android:name=".Users.Profile" />
+        <activity android:name=".Publications.ProfileBook"></activity>
     </application>
 
 </manifest>
