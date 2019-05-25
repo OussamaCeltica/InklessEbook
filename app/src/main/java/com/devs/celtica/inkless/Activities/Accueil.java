@@ -5,7 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.devs.celtica.inkless.R;
-import com.devs.celtica.inkless.UploadPdf;
+import com.devs.celtica.inkless.Publications.UploadPdf;
+import com.devs.celtica.inkless.Users.Profile;
 
 public class Accueil extends AppCompatActivity {
 
@@ -20,7 +21,7 @@ public class Accueil extends AppCompatActivity {
             startActivity(intent);
             //endregion
         }else {
-            startActivity(new Intent(Accueil.this, UploadPdf.class));
+            startActivity(new Intent(Accueil.this, Profile.class));
 
         }
 

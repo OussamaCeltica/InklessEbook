@@ -4,6 +4,7 @@ package com.devs.celtica.inkless.Publications;
 
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.devs.celtica.inkless.Activities.Login;
 import com.devs.celtica.inkless.PostServerRequest5;
@@ -38,6 +39,7 @@ public class Book extends Publication{
     }
 
     public void uploadBook(AppCompatActivity c, ArrayList<Uri> files){
+        Login.ajax.setUrlWrite("/upload_files.php");
         HashMap<String,String> data=new HashMap<String,String>();
 
         data.put("writer",Login.reader.id_user+"");
@@ -61,12 +63,13 @@ public class Book extends Publication{
 
             @Override
             public void echec(Exception e) {
+                e.printStackTrace();
 
             }
 
             @Override
             public void After(String result) {
-
+                Log.e("rrr","result"+result);
             }
         });
     }

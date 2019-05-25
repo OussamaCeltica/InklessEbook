@@ -85,6 +85,13 @@ public class User {
                 e.printStackTrace();
                 SignUp.isOnSend=false;
 
+                c.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(c,c.getResources().getString(R.string.signUp_cnct_err),Toast.LENGTH_SHORT).show();
+                    }
+                });
+
             }
 
             @Override

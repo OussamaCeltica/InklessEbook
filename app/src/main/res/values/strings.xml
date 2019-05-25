@@ -75,6 +75,17 @@
     <string name="profileBook_rating">التقييم:</string>
     <string name="profileBook_dateEdition">تاريخ الاصدار:</string>
     <string name="profileBook_edition">الناشر:</string>
+    <string name="signUp_cnct_err">تأكد من اتصالك بالانترنت ..</string>
+
+    <!-- String pour l upload des audio -->
+    <string name="uploadAudio_titre">عنوان المقطع</string>
+    <string name="uploadAudio_addPlus">+اضافة المزيد</string>
+    <string name="uploadAudio_prixAudio">سعر الكتاب الصوتي</string>
+    <string name="div_pub_choice">مانوع الملف الدي تريد رفعه</string>
+    <string name="div_pub_choice_book">كتاب</string>
+    <string name="div_pub_choice_audio">تسجيل صوتي</string>
+    <string name="div_confirm_non">ﻵ</string>
+    <string name="div_confirm_oui">نعم</string>
 
 
     <!--String des Nations -->

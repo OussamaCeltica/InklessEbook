@@ -1,14 +1,10 @@
-package com.devs.celtica.inkless;
+package com.devs.celtica.inkless.Publications;
 
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -18,13 +14,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.devs.celtica.inkless.Activities.Login;
-import com.devs.celtica.inkless.Publications.Book;
-import com.devs.celtica.inkless.Publications.BookFiles;
-import com.devs.celtica.inkless.Publications.TypeFiles;
+import com.devs.celtica.inkless.R;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class UploadPdf extends AppCompatActivity {
     TextView resumeButt,bookButt,photoButt;
@@ -65,7 +57,6 @@ public class UploadPdf extends AppCompatActivity {
             isbn = (EditText) findViewById(R.id.uploadPdf_isbn);
             decription=((EditText)findViewById(R.id.uploadPdf_bookDesc));
             //endregion
-
 
             //region uploadResumePdf ..
             resumeButt.setOnClickListener(new View.OnClickListener() {
@@ -127,12 +118,9 @@ public class UploadPdf extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
 
-                if(true){
-
-                }else {
                     Book b=new Book(maisonEdition.getText().toString()+"",titre1.getText().toString()+"",titre2.getText().toString()+"",isbn.getText().toString()+"",decription.getText().toString()+"",hasPaperVersion.isChecked(),Double.parseDouble(prixPaper.getText().toString()),Double.parseDouble(prixPdf.getText().toString()));
                     b.uploadBook(UploadPdf.this,files);
-                }
+
 
                 }
             });

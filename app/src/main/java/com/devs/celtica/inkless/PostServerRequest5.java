@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -32,6 +33,7 @@ import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
@@ -101,7 +103,12 @@ public class PostServerRequest5 {
             @Override
             public void run() {
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = new OkHttpClient.Builder()
+                        //pour le temp max d upload s il depasse alors un echec ..
+                        .connectTimeout(15, TimeUnit.MINUTES)
+                        .writeTimeout(15, TimeUnit.MINUTES)
+                        .readTimeout(15, TimeUnit.MINUTES)
+                        .build();
 
 
                 MultipartBody.Builder mb = new MultipartBody.Builder();
@@ -154,8 +161,12 @@ public class PostServerRequest5 {
             @Override
             public void run() {
 
-                OkHttpClient client = new OkHttpClient();
-
+                OkHttpClient client = new OkHttpClient.Builder()
+                        //pour le temp max d upload s il depasse alors un echec ..
+                        .connectTimeout(15, TimeUnit.MINUTES)
+                        .writeTimeout(15, TimeUnit.MINUTES)
+                        .readTimeout(15, TimeUnit.MINUTES)
+                        .build();
 
                 MultipartBody.Builder mb = new MultipartBody.Builder();
 
@@ -207,7 +218,12 @@ public class PostServerRequest5 {
             @Override
             public void run() {
 
-                OkHttpClient client = new OkHttpClient();
+                OkHttpClient client = new OkHttpClient.Builder()
+                        //pour le temp max d upload s il depasse alors un echec ..
+                        .connectTimeout(15, TimeUnit.MINUTES)
+                        .writeTimeout(15, TimeUnit.MINUTES)
+                        .readTimeout(15, TimeUnit.MINUTES)
+                        .build();
 
 
                 MultipartBody.Builder mb = new MultipartBody.Builder();
@@ -291,6 +307,7 @@ public class PostServerRequest5 {
                 String file_path;
 
 
+
                 OkHttpClient client = new OkHttpClient.Builder()
                         //pour le temp max d upload s il depasse alors un echec ..
                         .connectTimeout(15, TimeUnit.MINUTES)
@@ -315,7 +332,7 @@ public class PostServerRequest5 {
                     file_body = RequestBody.create(MediaType.parse(content_type),f);
 
                     file_path = f.getAbsolutePath();
-                    mb.addFormDataPart("type",content_type);
+                    mb.addFormDataPart("type","multipart/form-data");
                     mb.addFormDataPart("uploaded_file["+i+"]",file_path.substring(file_path.lastIndexOf("/")+1), file_body);
 
                 }
