@@ -1,6 +1,11 @@
 package com.devs.celtica.inkless.Users;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -34,33 +39,45 @@ public class Profile extends AppCompatActivity {
                 LinearLayout uploadButt=((LinearLayout)findViewById(R.id.profile_uploadButt));
                 uploadButt.setVisibility(View.VISIBLE);
                 uploadButt.setOnClickListener(new View.OnClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.M)
                     @Override
                     public void onClick(View view) {
 
-                        AlertDialog.Builder mb = new AlertDialog.Builder(Profile.this); //c est l activity non le context ..
+                        //region storage permission
+                        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
 
-                        View v=  getLayoutInflater().inflate(R.layout.div_pub_choice,null);
-                        TextView book=(TextView) v.findViewById(R.id.div_choiceBook);
-                        TextView audio=(TextView) v.findViewById(R.id.div_choiceAudio);
+                            //File write logic here
+                            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 5);
+                            return;
+                        }
+                        //endregion
 
-                        book.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                startActivity(new Intent(Profile.this,UploadPdf.class));
-                            }
-                        });
+                        else {
+                            AlertDialog.Builder mb = new AlertDialog.Builder(Profile.this); //c est l activity non le context ..
 
-                        audio.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                startActivity(new Intent(Profile.this, UploadAudio.class));
-                            }
-                        });
+                            View v = getLayoutInflater().inflate(R.layout.div_pub_choice, null);
+                            TextView book = (TextView) v.findViewById(R.id.div_choiceBook);
+                            TextView audio = (TextView) v.findViewById(R.id.div_choiceAudio);
 
-                        mb.setView(v);
-                        final AlertDialog ad=mb.create();
-                        ad.show();
-                        ad.setCanceledOnTouchOutside(false); //ne pas fermer on click en dehors ..
+                            book.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    startActivity(new Intent(Profile.this, UploadPdf.class));
+                                }
+                            });
+
+                            audio.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    startActivity(new Intent(Profile.this, UploadAudio.class));
+                                }
+                            });
+
+                            mb.setView(v);
+                            final AlertDialog ad = mb.create();
+                            ad.show();
+                            ad.setCanceledOnTouchOutside(false); //ne pas fermer on click en dehors ..
+                        }
 
 
 
