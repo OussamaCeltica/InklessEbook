@@ -59,6 +59,7 @@
     <string name="uploadBook_valider">انشر كتابي</string>
     <string name="uploadBook_succ">تمت الاضافة بنجاح</string>
     <string name="uploadBook_err">فشل عملية التحميل ، اعد المحاولة ..</string>
+    <string name="uploadBook_uploadWait">جاري التحميل  ..</string>
 
     <!--String de profile -->
     <string name="profile_user">حسابي</string>

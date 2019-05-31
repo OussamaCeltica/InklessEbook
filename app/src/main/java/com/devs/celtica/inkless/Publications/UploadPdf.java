@@ -121,6 +121,8 @@ public class UploadPdf extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
 
+                    progress.setTitle(getResources().getString(R.string.uploadBook_uploadWait));
+                    progress.show();
                     if (!isSended) {
                         isSended=true;
                         Book b=new Book(maisonEdition.getText().toString()+"",titre1.getText().toString()+"",titre2.getText().toString()+"",isbn.getText().toString()+"",decription.getText().toString()+"",category.getText().toString(),hasPaperVersion.isChecked(),Double.parseDouble(prixPaper.getText().toString()),Double.parseDouble(prixPdf.getText().toString()));
