@@ -1,5 +1,6 @@
 package com.devs.celtica.inkless.Publications;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
@@ -19,13 +20,14 @@ import com.devs.celtica.inkless.R;
 import java.util.ArrayList;
 
 public class UploadPdf extends AppCompatActivity {
-    TextView resumeButt,bookButt,photoButt;
+    TextView resumeButt,bookButt,photoButt,category;
     BookFiles request;
     ScrollView form1;
     LinearLayout form2;
     CheckBox hasPaperVersion;
     EditText titre1,titre2,prixPaper,prixPdf,maisonEdition,isbn,decription;
-    boolean isSended=false,isForm1=true;
+    public  static boolean isSended=false,isForm1=true;
+    public ProgressDialog progress;
     ArrayList<Uri> files=new ArrayList<Uri>();
 
     @Override
@@ -48,6 +50,7 @@ public class UploadPdf extends AppCompatActivity {
             form2 = (LinearLayout) findViewById(R.id.uploadPdf_form2);
 
             //region infos book ..
+            category=(TextView)findViewById(R.id.uploadPdf_category);
             titre1=(EditText)findViewById(R.id.uploadPdf_titre1);
             titre2=(EditText)findViewById(R.id.uploadPdf_titre2);
             hasPaperVersion = (CheckBox) findViewById(R.id.uploadPdf_hasPdfPaper);
@@ -118,8 +121,12 @@ public class UploadPdf extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
 
-                    Book b=new Book(maisonEdition.getText().toString()+"",titre1.getText().toString()+"",titre2.getText().toString()+"",isbn.getText().toString()+"",decription.getText().toString()+"",hasPaperVersion.isChecked(),Double.parseDouble(prixPaper.getText().toString()),Double.parseDouble(prixPdf.getText().toString()));
-                    b.uploadBook(UploadPdf.this,files);
+                    if (!isSended) {
+                        isSended=true;
+                        Book b=new Book(maisonEdition.getText().toString()+"",titre1.getText().toString()+"",titre2.getText().toString()+"",isbn.getText().toString()+"",decription.getText().toString()+"",category.getText().toString(),hasPaperVersion.isChecked(),Double.parseDouble(prixPaper.getText().toString()),Double.parseDouble(prixPdf.getText().toString()));
+                        b.uploadBook(UploadPdf.this,files);
+                    }
+
 
 
                 }

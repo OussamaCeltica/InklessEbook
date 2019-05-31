@@ -57,6 +57,11 @@ public class User {
         this.mdp = mdp;
     }
 
+    public User(int id_user, String nom) {
+        this.id_user = id_user;
+        this.nom = nom;
+    }
+
     public HashMap<String,String> getHashmapUserInfos (){
         HashMap<String,String> data=new HashMap<String,String>();
 
@@ -275,7 +280,7 @@ public class User {
                                         }
                                         //endregion
 
-                                        c.startActivity(new Intent(c,Profile.class));
+                                        c.startActivity(new Intent(c,Accueil.class));
                                         c.finish();
 
                                     }catch (JSONException e){

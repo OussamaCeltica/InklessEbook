@@ -15,10 +15,15 @@ public class Writer extends ReaderFull{
 
     public String ccp;
     public boolean contrat_writer_valide=false;
+    public ArrayList<Book> books=new ArrayList<Book>();
 
     public Writer(int id_user, String nom, String num_tel, String email, String mdp,String nation, String photo,String ccp) {
         super(id_user, nom, num_tel, email, mdp,nation, photo);
         this.ccp = ccp;
+    }
+
+    public Writer(int id_writer, String nom) {
+        super(id_writer,nom);
     }
 
     @Override
@@ -30,6 +35,13 @@ public class Writer extends ReaderFull{
 
         sendUserINfosToServer(c,data);
     }
+
+    public void getBooks(PostServerRequest5.doBeforAndAfterGettingData callback){
+        HashMap<String,String> data=new HashMap<>();
+        data.put("user",id_user+"");
+        Login.ajax.read("select * from publication pub inner join book on book.id_book=pub.id_pub and book.id_writter=?", data,callback);
+    }
+
 
     
 }

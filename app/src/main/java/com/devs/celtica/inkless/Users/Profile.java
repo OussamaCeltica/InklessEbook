@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.devs.celtica.inkless.Activities.Login;
+import com.devs.celtica.inkless.Publications.AfficherBooks;
 import com.devs.celtica.inkless.Publications.UploadAudio;
 import com.devs.celtica.inkless.R;
 import com.devs.celtica.inkless.Publications.UploadPdf;
@@ -35,9 +36,21 @@ public class Profile extends AppCompatActivity {
             //endregion
         }else {
 
+
             if(Login.reader instanceof Writer){
                 LinearLayout uploadButt=((LinearLayout)findViewById(R.id.profile_uploadButt));
                 uploadButt.setVisibility(View.VISIBLE);
+
+                //region voir stat ..
+                ((LinearLayout)findViewById(R.id.profile_stat)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        startActivity(new Intent(Profile.this, AfficherBooks.class));
+                    }
+                });
+                //endregion
+
+                //region upload ne wfile ..
                 uploadButt.setOnClickListener(new View.OnClickListener() {
                     @RequiresApi(api = Build.VERSION_CODES.M)
                     @Override
@@ -83,6 +96,7 @@ public class Profile extends AppCompatActivity {
 
                     }
                 });
+                //endregion
             }
         }
     }

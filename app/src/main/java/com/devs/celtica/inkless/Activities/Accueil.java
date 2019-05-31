@@ -21,7 +21,6 @@ public class Accueil extends AppCompatActivity {
             startActivity(intent);
             //endregion
         }else {
-            startActivity(new Intent(Accueil.this, Profile.class));
 
         }
 

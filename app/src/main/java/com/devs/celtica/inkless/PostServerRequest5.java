@@ -67,7 +67,7 @@ public class PostServerRequest5 {
 
 
 
-    String url;
+    public String url;
     private String urlRead="",urlWrite="";
     AppCompatActivity context=null;
     private FileUtils filePath=new FileUtils();

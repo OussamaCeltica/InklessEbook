@@ -1,16 +1,11 @@
 package com.devs.celtica.inkless.Activities;
 
-import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-
-import android.support.annotation.RequiresApi;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,10 +13,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.devs.celtica.inkless.PostServerRequest5;
+import com.devs.celtica.inkless.Publications.AfficherBooks;
+import com.devs.celtica.inkless.Publications.TypeFiles;
 import com.devs.celtica.inkless.R;
 import com.devs.celtica.inkless.Users.Narrator;
+import com.devs.celtica.inkless.Users.Profile;
 import com.devs.celtica.inkless.Users.ReaderFull;
 import com.devs.celtica.inkless.Users.User;
+import com.devs.celtica.inkless.Users.Writer;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Login extends AppCompatActivity {
     private EditText email,mdp;
@@ -32,7 +34,7 @@ public class Login extends AppCompatActivity {
 
 
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +47,10 @@ public class Login extends AppCompatActivity {
         email=(EditText)findViewById(R.id.login_email);
         mdp=(EditText)findViewById(R.id.login_mdp);
 
+        //startActivity(new Intent(Login.this, AfficherBooks.class));
+
+        //reader=new Writer(4,"","","","","","","");
+        //reader.openSelectFile(this, TypeFiles.PHOTO);
 
         //region connecter ..
         ((Button)findViewById(R.id.login_cnctButt)).setOnClickListener(new View.OnClickListener() {
@@ -79,4 +85,37 @@ public class Login extends AppCompatActivity {
 
     }
 
+    /*
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode==RESULT_OK){
+            ajax.setUrlWrite("/tst_up.php");
+            Uri uri =data.getData();
+            ArrayList<Uri> d=new ArrayList<>();
+            d.add(uri);
+            HashMap<String,String> hash=new HashMap<>();
+            hash.put("v","v");
+            ajax.sendWithFiles(hash, d ,Login.this, new PostServerRequest5.doBeforAndAfterGettingData() {
+                @Override
+                public void before() {
+                    progress.show();
+                }
+
+                @Override
+                public void echec(Exception e) {
+                    progress.dismiss();
+                    e.printStackTrace();
+                }
+
+                @Override
+                public void After(String result) {
+                    progress.dismiss();
+                    Log.e("rrr",result+"");
+                }
+            });
+        }
+    }
+    */
 }

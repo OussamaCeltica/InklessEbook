@@ -127,6 +127,54 @@
                         android:gravity="center"
                         android:background="@drawable/bg_inp">
 
+                        <!-- input category de book -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal"
+                            android:background="@drawable/bg_inp"
+                            android:layoutDirection="rtl">
+
+                            <TextView
+                                android:layout_width="70dp"
+                                android:layout_height="wrap_content"
+                                android:padding="5dp"
+                                android:fontFamily="@font/font1"
+                                android:textColor="@color/Black"
+                                android:textSize="17sp"
+                                android:text="@string/uploadBook_category"
+                                />
+
+                            <TextView
+                                android:layout_width="1dp"
+                                android:layout_height="match_parent"
+                                android:background="@color/Gray"/>
+                            <TextView
+                                android:id="@+id/uploadPdf_category"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:minHeight="40dp"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/font1"
+                                android:gravity="center|right"
+                                android:imeOptions="actionNext"
+                                android:layout_marginRight="15dp"
+                                android:background="@android:color/transparent"
+                                android:lineSpacingExtra="-8dp"
+                                android:textSize="20sp"
+                                android:textColor="@color/AppColor"
+                                android:textColorHint="@color/Black"
+                                android:hint="@string/uploadBook_categoryChoice"
+                                />
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:padding="10dp"
+                                android:src="@drawable/dropdown_menu"
+                                />
+                        </LinearLayout>
+
                         <!-- input titre 1 de book -->
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -143,7 +191,7 @@
                                 android:fontFamily="@font/font1"
                                 android:textColor="@color/Black"
                                 android:textSize="17sp"
-                                android:text=". العنوان"
+                                android:text="@string/uploadBook_titre1"
                                 />
 
                             <TextView

@@ -21,6 +21,10 @@ public class ReaderFull extends User{
         super(id_user, nom, num_tel, email, mdp, nation,photo);
     }
 
+    public ReaderFull(int id_reader, String nom) {
+        super(id_reader,nom);
+    }
+
     public void signUp(AppCompatActivity c){
         HashMap<String,String> data= getHashmapUserInfos ();
         data.put("request","inscription");

@@ -53,8 +53,9 @@
                     android:layoutDirection="rtl"
                     android:padding="10dp">
                     <ImageView
-                        android:layout_width="120dp"
-                        android:layout_height="150dp"
+                        android:id="@+id/profileBook_photo"
+                        android:layout_width="130dp"
+                        android:layout_height="160dp"
                         android:scaleType="fitXY"
                         android:src="@drawable/bg"/>
                     <LinearLayout
@@ -63,6 +64,7 @@
                         android:layout_marginRight="7dp"
                         android:orientation="vertical">
                         <TextView
+                            android:id="@+id/profileBook_nom1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/font1"
@@ -72,6 +74,7 @@
                             android:text="ةمقدمة لبن  التاريخية"/>
 
                         <TextView
+                            android:id="@+id/profileBook_nom2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/font1"
@@ -80,14 +83,40 @@
                             android:text="مقدمة لبن خلدون التاريخية"/>
 
                         <RatingBar
+                            android:id="@+id/profileBook_rating"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             style="@style/MyRatingBar"
                             android:layout_marginRight="10dp"
+                            android:isIndicator="true"
                             android:stepSize="1.0"
                             android:layoutDirection="rtl"
                             android:rating="4"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:orientation="horizontal">
+                            <TextView
+
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:fontFamily="@font/font1"
+                                android:textColor="@color/BleuFonce"
+                                android:textSize="17sp"
+                                android:text="@string/profileBook_writer"/>
+                            <TextView
+                                android:id="@+id/profileBook_writer"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/font1"
+                                android:textColor="@color/BleuFonce"
+                                android:textSize="17sp"
+                                android:text="مقدمة لبن خلدون التاريخية"/>
+                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -100,6 +129,7 @@
                     android:layoutDirection="rtl">
 
                     <LinearLayout
+                        android:id="@+id/profileBook_audioButt"
                         android:layout_width="100dp"
                         android:layout_height="match_parent"
                         android:background="@drawable/bg_butt3"
@@ -124,6 +154,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/profileBook_readButt"
                         android:layout_width="100dp"
                         android:layout_height="match_parent"
                         android:layout_marginRight="10dp"
@@ -162,6 +193,7 @@
                             android:layout_marginBottom="8dp"
                             android:src="@drawable/buy"/>
                         <TextView
+                            android:id="@+id/profileBook_buyButt"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
 
@@ -201,10 +233,11 @@
                             android:textSize="22sp"
                             android:text="@string/profileBook_rating"/>
                         <RatingBar
+                            android:id="@+id/profileBook_rating2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
-
+                            android:isIndicator="true"
                             style="@style/MyRatingBar"
                             android:layout_marginRight="10dp"
                             android:stepSize="1.0"
@@ -216,6 +249,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
                         android:layout_marginRight="10dp"
                         android:layout_marginLeft="10dp"
                         android:layoutDirection="rtl"
@@ -224,13 +258,13 @@
                         <TextView
                             android:layout_width="130dp"
                             android:layout_height="match_parent"
-                            android:gravity="center|right"
                             android:layout_gravity="center"
                             android:fontFamily="@font/font1"
                             android:textColor="@color/BleuFonce"
                             android:textSize="22sp"
                             android:text="@string/profileBook_edition"/>
                         <TextView
+                            android:id="@+id/profileBook_maisonEdition"
                             android:layout_width="130dp"
                             android:layout_height="match_parent"
                             android:gravity="center|right"
@@ -261,6 +295,7 @@
                             android:textSize="22sp"
                             android:text="@string/profileBook_dateEdition"/>
                         <TextView
+                            android:id="@+id/profileBook_date"
                             android:layout_width="130dp"
                             android:layout_height="match_parent"
                             android:gravity="center|right"
