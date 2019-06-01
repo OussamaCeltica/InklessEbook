@@ -52,8 +52,8 @@ public class Login extends AppCompatActivity {
         //reader=new Writer(4,"","","","","","","");
         //reader.openSelectFile(this, TypeFiles.PHOTO);
 
-        User user=new User("a@a","1");
-        user.connecter(Login.this);
+        //User user=new User("a@a","1");
+       // user.connecter(Login.this);
 
         //region connecter ..
         ((Button)findViewById(R.id.login_cnctButt)).setOnClickListener(new View.OnClickListener() {
