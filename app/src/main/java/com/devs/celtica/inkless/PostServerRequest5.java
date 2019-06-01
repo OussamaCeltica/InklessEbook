@@ -2,7 +2,6 @@ package com.devs.celtica.inkless;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.CursorLoader;
@@ -12,19 +11,13 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.webkit.MimeTypeMap;
-import android.widget.Toast;
-
-import org.json.JSONException;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -33,23 +26,27 @@ import okhttp3.Callback;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
-import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-//N oublier pas d installer: compile 'com.squareup.okhttp3:okhttp:3.10.0'
+import io.github.lizhangqu.coreprogress.ProgressHelper;
+import io.github.lizhangqu.coreprogress.ProgressListener;
+import io.github.lizhangqu.coreprogress.ProgressUIListener;
 
-/**
- * Created by celtica on 02/08/18.
- */
 
-// n oublier pas d ajouter le test de permission pour l acces au storage ..
 
 public class PostServerRequest5 {
 
         /*
      ------------- Utilisation -----------
+
+     //N oublier pas d installer: compile 'com.squareup.okhttp3:okhttp:3.10.0'
+     //implementation 'io.github.lizhangqu:coreprogress:1.0.2'
+
+// n oublier pas d ajouter le test de permission pour l acces au storage ..
+
+
 
      -Pour la methode sendWithIMage == destiné au upload des image avec
      qlq data comme un nom specifique ou descreption .. etc pour faire il faut lui
@@ -304,7 +301,7 @@ public class PostServerRequest5 {
 
     PS: le Hashmap contient les données comme clé/valeur , dans php: $valeur=$_POST['clé'];
      */
-    public void sendWithFiles(final HashMap<String,String> data, final ArrayList<Uri> files, final AppCompatActivity c , final doBeforAndAfterGettingData d){
+    public void sendWithFiles(final HashMap<String,String> data, final ArrayList<Uri> files, final AppCompatActivity c , final doBeforAndAfterUpload d){
 
         context=c;
         d.before();
@@ -363,9 +360,24 @@ public class PostServerRequest5 {
 
                 request_body=mb.build();
 
+                RequestBody r=ProgressHelper.withProgress(request_body, new ProgressListener() {
+                    @Override
+                    public void onProgressChanged(final long numBytes, final long totalBytes, final float percent, final float speed) {
+                        c.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                d.onProgress(numBytes,totalBytes,percent,speed);
+                                Log.e("prr",percent*100+" %");
+                            }
+                        });
+
+                    }
+                });
+
+
                 Request request = new Request.Builder()
                         .url(url+urlWrite)
-                        .post(request_body)
+                        .post(r)
                         .build();
 
 
@@ -468,6 +480,10 @@ public class PostServerRequest5 {
         void echec(Exception e);
         void After(InputStream result);
 
+    }
+
+    public interface doBeforAndAfterUpload extends doBeforAndAfterGettingData {
+        void onProgress(long numBytes, long totalBytes, float percent, float speed);
     }
 
     //cette classe permet de récupéré le réel chemin d un fichier depuis un Uri ..

@@ -5,6 +5,8 @@ package com.devs.celtica.inkless.Publications;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.devs.celtica.inkless.Activities.Login;
@@ -63,11 +65,21 @@ public class Book extends Publication{
         else
             data.put("has_paper_version","0");
 
-        Login.ajax.sendWithFiles(data, files, c, new PostServerRequest5.doBeforAndAfterGettingData() {
+        Login.ajax.sendWithFiles(data, files, c, new PostServerRequest5.doBeforAndAfterUpload() {
+            @Override
+            public void onProgress(long numBytes, long totalBytes, float percent, float speed) {
+                ProgressBar progressBar=(ProgressBar)((UploadPdf)c).progressView.findViewById(R.id.div_progressbar_bar);
+                progressBar.setProgress((int) (percent*100));
+                TextView perrcent=(TextView)((UploadPdf)c).progressView.findViewById(R.id.div_progressbar_pourcent);
+                perrcent.setText(String.format("%.2f",Double.parseDouble(percent*100+""))+" %");
+            }
+
             @Override
             public void before() {
 
             }
+
+
 
             @Override
             public void echec(Exception e) {
@@ -77,7 +89,7 @@ public class Book extends Publication{
                     public void run() {
                         Toast.makeText(c,c.getResources().getString(R.string.uploadBook_err),Toast.LENGTH_SHORT).show();
                         UploadPdf.isSended=false;
-                        ((UploadPdf)c).progress.dismiss();
+                        ((UploadPdf)c).ad.dismiss();
                     }
                 });
 
@@ -86,7 +98,7 @@ public class Book extends Publication{
             @Override
             public void After(String result) {
                 Log.e("rrr","upload msg: "+result+" / "+result.trim().length());
-                ((UploadPdf)c).progress.dismiss();
+                ((UploadPdf)c).ad.dismiss();
                 UploadPdf.isSended=false;
                 if (result.trim().equals("good")){
                     //c.finish();

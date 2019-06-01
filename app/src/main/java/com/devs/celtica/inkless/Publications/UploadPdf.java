@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +34,10 @@ public class UploadPdf extends AppCompatActivity {
     public ProgressDialog progress;
     ArrayList<Uri> files=new ArrayList<Uri>();
 
+    View progressView;
+    AlertDialog  ad;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +52,15 @@ public class UploadPdf extends AppCompatActivity {
         }else {
 
             progress=new ProgressDialog(this);
+
+            progressView= getLayoutInflater().inflate(R.layout.div_progressbar,null);
+            AlertDialog.Builder mb = new AlertDialog.Builder(this); //c est l activity non le context ..
+            mb.setView(progressView);
+            ad=mb.create();
+
+
+
+
 
             resumeButt = (TextView) findViewById(R.id.uploadPdf_resumeButt);
             bookButt = (TextView) findViewById(R.id.uploadPdf_bookButt);
@@ -151,15 +166,24 @@ public class UploadPdf extends AppCompatActivity {
                                 if (prixPaper.getText().toString().equals("")){
                                     Toast.makeText(getApplicationContext(),getResources().getString(R.string.signUp_errRemplisage),Toast.LENGTH_SHORT).show();
                                 }else {
-                                    progress.setTitle(getResources().getString(R.string.uploadBook_uploadWait));
-                                    progress.show();
+
+
+
+
+                                    ((TextView)progressView.findViewById(R.id.div_progressbar_msg)).setText(getResources().getString(R.string.uploadBook_uploadWait));
+                                    ad.show();
+                                    ad.setCanceledOnTouchOutside(false); //ne pas fermer on click en dehors ..
+
                                     isSended = true;
                                     Book b = new Book(maisonEdition.getText().toString() + "", titre1.getText().toString() + "", titre2.getText().toString() + "", isbn.getText().toString() + "", decription.getText().toString() + "", category.getText().toString(), hasPaperVersion.isChecked(), Double.parseDouble(prixPaper.getText().toString()), Double.parseDouble(prixPdf.getText().toString()));
                                     b.uploadBook(UploadPdf.this, files);
                                 }
                             }else {
-                                progress.setTitle(getResources().getString(R.string.uploadBook_uploadWait));
-                                progress.show();
+
+                                ((TextView)progressView.findViewById(R.id.div_progressbar_msg)).setText(getResources().getString(R.string.uploadBook_uploadWait));
+                                ad.show();
+                                ad.setCanceledOnTouchOutside(false); //ne pas fermer on click en dehors ..
+
                                 isSended = true;
                                 Book b = new Book(maisonEdition.getText().toString() + "", titre1.getText().toString() + "", titre2.getText().toString() + "", isbn.getText().toString() + "", decription.getText().toString() + "", category.getText().toString(), hasPaperVersion.isChecked(), 0, Double.parseDouble(prixPdf.getText().toString()));
                                 b.uploadBook(UploadPdf.this, files);

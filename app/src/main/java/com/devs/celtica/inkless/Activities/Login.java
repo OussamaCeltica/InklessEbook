@@ -51,6 +51,7 @@ public class Login extends AppCompatActivity {
         //final User user=new User("a@a","1");
         //user.connecter(Login.this);
 
+        Log.e("fff",String.format("%.2f",Double.parseDouble(56.8345*33+"")));
 
         //region connecter ..
         ((Button)findViewById(R.id.login_cnctButt)).setOnClickListener(new View.OnClickListener() {
