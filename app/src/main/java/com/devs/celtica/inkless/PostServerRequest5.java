@@ -364,7 +364,7 @@ public class PostServerRequest5 {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
 
-                        queryResult=response.body().string();
+                        queryResult=response.body().string().replaceAll("\n","");
                         d.After(queryResult);
                     }
                 });

@@ -43,6 +43,8 @@ public class UploadPdf extends AppCompatActivity {
             //endregion
         }else {
 
+            progress=new ProgressDialog(this);
+
             resumeButt = (TextView) findViewById(R.id.uploadPdf_resumeButt);
             bookButt = (TextView) findViewById(R.id.uploadPdf_bookButt);
             photoButt = (TextView) findViewById(R.id.uploadPdf_photoButt);

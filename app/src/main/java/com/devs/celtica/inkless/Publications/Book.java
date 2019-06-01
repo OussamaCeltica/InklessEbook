@@ -72,20 +72,39 @@ public class Book extends Publication{
             @Override
             public void echec(Exception e) {
                 e.printStackTrace();
-                Toast.makeText(c,c.getResources().getString(R.string.uploadBook_err),Toast.LENGTH_SHORT).show();
-                UploadPdf.isSended=false;
-                ((UploadPdf)c).progress.dismiss();
+                c.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(c,c.getResources().getString(R.string.uploadBook_err),Toast.LENGTH_SHORT).show();
+                        UploadPdf.isSended=false;
+                        ((UploadPdf)c).progress.dismiss();
+                    }
+                });
+
             }
 
             @Override
             public void After(String result) {
+                Log.e("rrr","upload msg: "+result);
                 ((UploadPdf)c).progress.dismiss();
                 UploadPdf.isSended=false;
                 if (result.equals("good")){
                     c.finish();
-                    Toast.makeText(c,c.getResources().getString(R.string.uploadBook_succ),Toast.LENGTH_SHORT).show();
+                    c.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(c,c.getResources().getString(R.string.uploadBook_succ),Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
                 }else {
-                    Toast.makeText(c,c.getResources().getString(R.string.uploadBook_err),Toast.LENGTH_SHORT).show();
+                    c.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(c,c.getResources().getString(R.string.uploadBook_err),Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
                 }
             }
         });
