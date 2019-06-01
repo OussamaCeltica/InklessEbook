@@ -85,11 +85,11 @@ public class Book extends Publication{
 
             @Override
             public void After(String result) {
-                Log.e("rrr","upload msg: "+result);
+                Log.e("rrr","upload msg: "+result+" / "+result.trim().length());
                 ((UploadPdf)c).progress.dismiss();
                 UploadPdf.isSended=false;
-                if (result.equals("good")){
-                    c.finish();
+                if (result.trim().equals("good")){
+                    //c.finish();
                     c.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

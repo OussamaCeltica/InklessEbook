@@ -64,6 +64,7 @@ public class AfficherBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         //Picasso.get().load(books.get(position).photo).into(((BookView)holder).photo);
         Picasso.get()
                 .load(Login.ajax.url+"/"+books.get(position).photo)
+                .resize(100,200)
                 .placeholder(R.drawable.bg_butt_bleu_fonce)
                 .error(R.drawable.bg_inp)
                 .into(((BookView)holder).photo);

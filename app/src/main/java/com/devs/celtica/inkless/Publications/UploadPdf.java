@@ -9,10 +9,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.devs.celtica.inkless.Activities.Login;
 import com.devs.celtica.inkless.R;
@@ -63,7 +65,9 @@ public class UploadPdf extends AppCompatActivity {
             decription=((EditText)findViewById(R.id.uploadPdf_bookDesc));
             //endregion
 
-            //region uploadResumePdf ..
+
+
+            //region getResumePdf file ..
             resumeButt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -73,7 +77,7 @@ public class UploadPdf extends AppCompatActivity {
             });
             //endregion
 
-            //region uploadCompletePdf ..
+            //region getCompletePdf file ..
             bookButt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -83,7 +87,7 @@ public class UploadPdf extends AppCompatActivity {
             });
             //endregion
 
-            //region photo Book ..
+            //region getphotoBook file..
             photoButt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -97,23 +101,38 @@ public class UploadPdf extends AppCompatActivity {
             ((Button) findViewById(R.id.uploadPdf_nextButt)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    isForm1=false;
-                    form1.animate()
-                            .setDuration(500)
-                            .alpha(0)
-                            .start();
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            form1.setVisibility(View.GONE);
-                            form2.setVisibility(View.VISIBLE);
 
-                            form2.animate()
-                                    .setDuration(500)
-                                    .alpha(1)
-                                    .start();
-                        }
-                    }, 520);
+                    if(resumeButt.getText().toString().equals("") || bookButt.getText().toString().equals("") || photoButt.getText().toString().equals("") || titre1.getText().toString().equals("") || titre2.getText().toString().equals("") || decription.getText().toString().equals("")){
+                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.signUp_errRemplisage),Toast.LENGTH_SHORT).show();
+                    }else {
+                        isForm1=false;
+                        form1.animate()
+                                .setDuration(500)
+                                .alpha(0)
+                                .start();
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                form1.setVisibility(View.GONE);
+                                form2.setVisibility(View.VISIBLE);
+
+                                form2.animate()
+                                        .setDuration(500)
+                                        .alpha(1)
+                                        .start();
+                            }
+                        }, 520);
+                    }
+                }
+            });
+            //endregion
+
+            //region on prixpaper check incheck ..
+            hasPaperVersion.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if (b) ((LinearLayout)prixPaper.getParent()).setVisibility(View.VISIBLE);
+                    else  ((LinearLayout)prixPaper.getParent()).setVisibility(View.GONE);
                 }
             });
             //endregion
@@ -123,12 +142,33 @@ public class UploadPdf extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
 
-                    progress.setTitle(getResources().getString(R.string.uploadBook_uploadWait));
-                    progress.show();
+
                     if (!isSended) {
-                        isSended=true;
-                        Book b=new Book(maisonEdition.getText().toString()+"",titre1.getText().toString()+"",titre2.getText().toString()+"",isbn.getText().toString()+"",decription.getText().toString()+"",category.getText().toString(),hasPaperVersion.isChecked(),Double.parseDouble(prixPaper.getText().toString()),Double.parseDouble(prixPdf.getText().toString()));
-                        b.uploadBook(UploadPdf.this,files);
+                        if(prixPdf.getText().equals("")){
+                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.signUp_errRemplisage),Toast.LENGTH_SHORT).show();
+                        }else {
+                            if(hasPaperVersion.isChecked()){
+                                if (prixPaper.getText().toString().equals("")){
+                                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.signUp_errRemplisage),Toast.LENGTH_SHORT).show();
+                                }else {
+                                    progress.setTitle(getResources().getString(R.string.uploadBook_uploadWait));
+                                    progress.show();
+                                    isSended = true;
+                                    Book b = new Book(maisonEdition.getText().toString() + "", titre1.getText().toString() + "", titre2.getText().toString() + "", isbn.getText().toString() + "", decription.getText().toString() + "", category.getText().toString(), hasPaperVersion.isChecked(), Double.parseDouble(prixPaper.getText().toString()), Double.parseDouble(prixPdf.getText().toString()));
+                                    b.uploadBook(UploadPdf.this, files);
+                                }
+                            }else {
+                                progress.setTitle(getResources().getString(R.string.uploadBook_uploadWait));
+                                progress.show();
+                                isSended = true;
+                                Book b = new Book(maisonEdition.getText().toString() + "", titre1.getText().toString() + "", titre2.getText().toString() + "", isbn.getText().toString() + "", decription.getText().toString() + "", category.getText().toString(), hasPaperVersion.isChecked(), 0, Double.parseDouble(prixPdf.getText().toString()));
+                                b.uploadBook(UploadPdf.this, files);
+                            }
+
+                        }
+                    }else {
+                        progress.setTitle(getResources().getString(R.string.uploadBook_uploadWait));
+                        progress.show();
                     }
 
 

@@ -47,13 +47,10 @@ public class Login extends AppCompatActivity {
         email=(EditText)findViewById(R.id.login_email);
         mdp=(EditText)findViewById(R.id.login_mdp);
 
-        //startActivity(new Intent(Login.this, AfficherBooks.class));
 
-        //reader=new Writer(4,"","","","","","","");
-        //reader.openSelectFile(this, TypeFiles.PHOTO);
+        //final User user=new User("a@a","1");
+        //user.connecter(Login.this);
 
-        //User user=new User("a@a","1");
-       // user.connecter(Login.this);
 
         //region connecter ..
         ((Button)findViewById(R.id.login_cnctButt)).setOnClickListener(new View.OnClickListener() {
@@ -69,6 +66,7 @@ public class Login extends AppCompatActivity {
                     user.connecter(Login.this);
                 }
 
+
             }
         });
 
@@ -81,6 +79,7 @@ public class Login extends AppCompatActivity {
 
                 startActivity(new Intent(Login.this,SignUp.class));
 
+
             }
         });
         //endregion
@@ -88,37 +87,5 @@ public class Login extends AppCompatActivity {
 
     }
 
-    /*
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode==RESULT_OK){
-            ajax.setUrlWrite("/tst_up.php");
-            Uri uri =data.getData();
-            ArrayList<Uri> d=new ArrayList<>();
-            d.add(uri);
-            HashMap<String,String> hash=new HashMap<>();
-            hash.put("v","v");
-            ajax.sendWithFiles(hash, d ,Login.this, new PostServerRequest5.doBeforAndAfterGettingData() {
-                @Override
-                public void before() {
-                    progress.show();
-                }
-
-                @Override
-                public void echec(Exception e) {
-                    progress.dismiss();
-                    e.printStackTrace();
-                }
-
-                @Override
-                public void After(String result) {
-                    progress.dismiss();
-                    Log.e("rrr",result+"");
-                }
-            });
-        }
-    }
-    */
 }

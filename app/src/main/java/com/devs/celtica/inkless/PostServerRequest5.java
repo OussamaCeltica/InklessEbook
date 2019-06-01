@@ -65,6 +65,7 @@ public class PostServerRequest5 {
 
      */
 
+        OkHttpClient client=null;
 
 
     public String url;
@@ -76,6 +77,14 @@ public class PostServerRequest5 {
 
     public PostServerRequest5(String url ) {
         this.url = url;
+
+            client = new OkHttpClient.Builder()
+                    //pour le temp max d upload s il depasse alors un echec ..
+                    .connectTimeout(15, TimeUnit.MINUTES)
+                    .writeTimeout(15, TimeUnit.MINUTES)
+                    .readTimeout(15, TimeUnit.MINUTES)
+                    .build();
+
 
     }
 
@@ -103,12 +112,14 @@ public class PostServerRequest5 {
             @Override
             public void run() {
 
-                OkHttpClient client = new OkHttpClient.Builder()
-                        //pour le temp max d upload s il depasse alors un echec ..
-                        .connectTimeout(15, TimeUnit.MINUTES)
-                        .writeTimeout(15, TimeUnit.MINUTES)
-                        .readTimeout(15, TimeUnit.MINUTES)
-                        .build();
+                if (client == null){
+                     client = new OkHttpClient.Builder()
+                            //pour le temp max d upload s il depasse alors un echec ..
+                            .connectTimeout(15, TimeUnit.MINUTES)
+                            .writeTimeout(15, TimeUnit.MINUTES)
+                            .readTimeout(15, TimeUnit.MINUTES)
+                            .build();
+                }
 
 
                 MultipartBody.Builder mb = new MultipartBody.Builder();
@@ -141,7 +152,7 @@ public class PostServerRequest5 {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
 
-                        queryResult=response.body().string();
+                        queryResult=response.body().string().replaceAll("\n","");
                         d.After(queryResult);
                     }
                 });
@@ -161,12 +172,14 @@ public class PostServerRequest5 {
             @Override
             public void run() {
 
-                OkHttpClient client = new OkHttpClient.Builder()
-                        //pour le temp max d upload s il depasse alors un echec ..
-                        .connectTimeout(15, TimeUnit.MINUTES)
-                        .writeTimeout(15, TimeUnit.MINUTES)
-                        .readTimeout(15, TimeUnit.MINUTES)
-                        .build();
+                if (client == null){
+                    client = new OkHttpClient.Builder()
+                            //pour le temp max d upload s il depasse alors un echec ..
+                            .connectTimeout(15, TimeUnit.MINUTES)
+                            .writeTimeout(15, TimeUnit.MINUTES)
+                            .readTimeout(15, TimeUnit.MINUTES)
+                            .build();
+                }
 
                 MultipartBody.Builder mb = new MultipartBody.Builder();
 
@@ -198,7 +211,7 @@ public class PostServerRequest5 {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
 
-                        queryResult=response.body().string();
+                        queryResult=response.body().string().replaceAll("\n","");
                         d.After(queryResult);
                     }
                 });
@@ -217,13 +230,14 @@ public class PostServerRequest5 {
 
             @Override
             public void run() {
-
-                OkHttpClient client = new OkHttpClient.Builder()
-                        //pour le temp max d upload s il depasse alors un echec ..
-                        .connectTimeout(15, TimeUnit.MINUTES)
-                        .writeTimeout(15, TimeUnit.MINUTES)
-                        .readTimeout(15, TimeUnit.MINUTES)
-                        .build();
+                if (client == null){
+                    client = new OkHttpClient.Builder()
+                            //pour le temp max d upload s il depasse alors un echec ..
+                            .connectTimeout(15, TimeUnit.MINUTES)
+                            .writeTimeout(15, TimeUnit.MINUTES)
+                            .readTimeout(15, TimeUnit.MINUTES)
+                            .build();
+                }
 
 
                 MultipartBody.Builder mb = new MultipartBody.Builder();
@@ -308,12 +322,14 @@ public class PostServerRequest5 {
 
 
 
-                OkHttpClient client = new OkHttpClient.Builder()
-                        //pour le temp max d upload s il depasse alors un echec ..
-                        .connectTimeout(15, TimeUnit.MINUTES)
-                        .writeTimeout(15, TimeUnit.MINUTES)
-                        .readTimeout(15, TimeUnit.MINUTES)
-                        .build();
+                if (client == null){
+                    client = new OkHttpClient.Builder()
+                            //pour le temp max d upload s il depasse alors un echec ..
+                            .connectTimeout(15, TimeUnit.MINUTES)
+                            .writeTimeout(15, TimeUnit.MINUTES)
+                            .readTimeout(15, TimeUnit.MINUTES)
+                            .build();
+                }
 
 
                 MultipartBody.Builder mb = new MultipartBody.Builder();
@@ -363,7 +379,6 @@ public class PostServerRequest5 {
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-
                         queryResult=response.body().string().replaceAll("\n","");
                         d.After(queryResult);
                     }
@@ -394,12 +409,14 @@ public class PostServerRequest5 {
                 String file_path;
 
 
-                OkHttpClient client = new OkHttpClient.Builder()
-                        //pour le temp max d upload s il depasse alors un echec ..
-                        .connectTimeout(15, TimeUnit.MINUTES)
-                        .writeTimeout(15, TimeUnit.MINUTES)
-                        .readTimeout(15, TimeUnit.MINUTES)
-                        .build();
+                if (client == null){
+                    client = new OkHttpClient.Builder()
+                            //pour le temp max d upload s il depasse alors un echec ..
+                            .connectTimeout(15, TimeUnit.MINUTES)
+                            .writeTimeout(15, TimeUnit.MINUTES)
+                            .readTimeout(15, TimeUnit.MINUTES)
+                            .build();
+                }
 
 
                 MultipartBody.Builder mb = new MultipartBody.Builder();
