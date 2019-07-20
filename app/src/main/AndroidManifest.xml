@@ -24,7 +24,7 @@
         <activity android:name=".Activities.SignUp" />
         <activity android:name=".Activities.Accueil" />
         <activity android:name=".Publications.UploadPdf" />
-        <activity android:name=".Users.Profile" />
+        <activity android:name=".Users.Profile"  android:noHistory="true"/>
         <activity android:name=".Publications.ProfileBook" />
         <activity android:name=".Publications.UploadAudio" />
     </application>

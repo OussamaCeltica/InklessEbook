@@ -52,9 +52,11 @@ public class BottiomMenu extends Fragment {
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(! (c  instanceof Profile)){
-                    c.startActivity(new Intent(c, Profile.class));
-                }
+
+                Intent i=new Intent(c, Profile.class);
+
+                c.startActivity(new Intent(c, Profile.class));
+
 
             }
         });

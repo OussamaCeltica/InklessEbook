@@ -265,7 +265,7 @@ public class PostServerRequest5 {
                     public void onResponse(Call call, Response response) throws IOException {
 
 
-                       queryResult=response.body().string().replaceAll("\n","");
+                       queryResult=response.body().string().replaceAll("\n","").trim();
                         d.After(queryResult);
 
                         /*-------- Manipulation de resultats ----------

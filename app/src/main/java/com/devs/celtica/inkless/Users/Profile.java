@@ -9,16 +9,20 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.devs.celtica.inkless.Activities.Login;
 import com.devs.celtica.inkless.Publications.AfficherBooks;
 import com.devs.celtica.inkless.Publications.UploadAudio;
 import com.devs.celtica.inkless.R;
 import com.devs.celtica.inkless.Publications.UploadPdf;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class Profile extends AppCompatActivity {
 
@@ -36,10 +40,16 @@ public class Profile extends AppCompatActivity {
             //endregion
         }else {
 
+            LinearLayout uploadButt=((LinearLayout)findViewById(R.id.profile_uploadButt));
+            TextView user_type=(TextView)findViewById(R.id.profile_type);
+            CircleImageView profile_image=(CircleImageView)findViewById(R.id.profile_image);
+
+            ((TextView)findViewById(R.id.profile_name)).setText(Login.reader.nom+"");
 
             if(Login.reader instanceof Writer){
-                LinearLayout uploadButt=((LinearLayout)findViewById(R.id.profile_uploadButt));
-                uploadButt.setVisibility(View.VISIBLE);
+
+                user_type.setText(getResources().getString(R.string.signUp_writer));
+
 
                 //region voir stat ..
                 ((LinearLayout)findViewById(R.id.profile_stat)).setOnClickListener(new View.OnClickListener() {
@@ -56,47 +66,57 @@ public class Profile extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
 
-                        //region storage permission
-                        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+                       if(!((Writer)Login.reader).contrat_writer_valide){
+                           Log.e("tstt","nope");
+                           Toast.makeText(getApplicationContext(),getResources().getString(R.string.writer_noContrat),Toast.LENGTH_SHORT).show();
 
-                            //File write logic here
-                            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 5);
-                            return;
-                        }
-                        //endregion
+                       }else {
+                           //region storage permission
+                           if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
 
-                        else {
-                            AlertDialog.Builder mb = new AlertDialog.Builder(Profile.this); //c est l activity non le context ..
+                               //File write logic here
+                               requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 5);
+                               return;
+                           }
+                           //endregion
 
-                            View v = getLayoutInflater().inflate(R.layout.div_pub_choice, null);
-                            TextView book = (TextView) v.findViewById(R.id.div_choiceBook);
-                            TextView audio = (TextView) v.findViewById(R.id.div_choiceAudio);
+                           else {
+                               AlertDialog.Builder mb = new AlertDialog.Builder(Profile.this); //c est l activity non le context ..
 
-                            book.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    startActivity(new Intent(Profile.this, UploadPdf.class));
-                                }
-                            });
+                               View v = getLayoutInflater().inflate(R.layout.div_pub_choice, null);
+                               TextView book = (TextView) v.findViewById(R.id.div_choiceBook);
+                               TextView audio = (TextView) v.findViewById(R.id.div_choiceAudio);
 
-                            audio.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    startActivity(new Intent(Profile.this, UploadAudio.class));
-                                }
-                            });
+                               book.setOnClickListener(new View.OnClickListener() {
+                                   @Override
+                                   public void onClick(View view) {
+                                       startActivity(new Intent(Profile.this, UploadPdf.class));
+                                   }
+                               });
 
-                            mb.setView(v);
-                            final AlertDialog ad = mb.create();
-                            ad.show();
-                            ad.setCanceledOnTouchOutside(false); //ne pas fermer on click en dehors ..
-                        }
+                               audio.setOnClickListener(new View.OnClickListener() {
+                                   @Override
+                                   public void onClick(View view) {
+                                       startActivity(new Intent(Profile.this, UploadAudio.class));
+                                   }
+                               });
+
+                               mb.setView(v);
+                               final AlertDialog ad = mb.create();
+                               ad.show();
+                               ad.setCanceledOnTouchOutside(false); //ne pas fermer on click en dehors ..
+                           }
+                       }
 
 
 
                     }
                 });
                 //endregion
+            }else {
+                user_type.setText(getResources().getString(R.string.signUp_reader));
+                uploadButt.setVisibility(View.GONE);
+
             }
         }
     }

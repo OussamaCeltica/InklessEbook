@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -146,6 +147,8 @@ public class SignUp extends AppCompatActivity {
                             div_insc.setVisibility(View.VISIBLE);
                             if (type_userChecked==reader){
                                 div_ccp.setVisibility(View.GONE);
+                            }else {
+                                div_ccp.setVisibility(View.VISIBLE);
                             }
                             div_insc.animate()
                                     .setDuration(500)
@@ -164,91 +167,29 @@ public class SignUp extends AppCompatActivity {
                     if(username.getText().toString().equals("") || email.getText().toString().equals("") || mdp.getText().toString().equals("") || confirmMdp.getText().toString().equals("") || nation.getText().toString().equals("") || (type_userChecked!=reader && ccp.getText().toString().equals(""))){
                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.signUp_errRemplisage),Toast.LENGTH_SHORT).show();
                     }else {
-                        if(!mdp.getText().toString().equals(confirmMdp.getText().toString())){
-                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.signUp_confirmMdpErr),Toast.LENGTH_SHORT).show();
-                        }else {
-                            if (!isOnSend) {
-                                isOnSend = true;
-                                if (type_userChecked == reader) {
-                                    new ReaderFull(5, username.getText().toString(), "", email.getText().toString(), mdp.getText().toString(), nation.getText().toString(), "").signUp(SignUp.this);
-                                } else if (type_userChecked == writer) {
-                                    new Writer(5, username.getText().toString(), "", email.getText().toString(), mdp.getText().toString(), nation.getText().toString(), "", ccp.getText().toString()).signUp(SignUp.this);
-                                } else {
-                                    new Narrator(5, username.getText().toString(), "", email.getText().toString(), mdp.getText().toString(), nation.getText().toString(), "", ccp.getText().toString()).signUp(SignUp.this);
+
+                        if(!Patterns.EMAIL_ADDRESS.matcher(email.getText().toString()).matches())
+                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.login_email_err), Toast.LENGTH_SHORT).show();
+                        else{
+                            if(!mdp.getText().toString().equals(confirmMdp.getText().toString())){
+                                Toast.makeText(getApplicationContext(),getResources().getString(R.string.signUp_confirmMdpErr),Toast.LENGTH_SHORT).show();
+                            }else {
+                                if (!isOnSend) {
+                                    isOnSend = true;
+                                    if (type_userChecked == reader) {
+                                        new ReaderFull(5, username.getText().toString(), "", email.getText().toString(), mdp.getText().toString(), nation.getText().toString(), "").signUp(SignUp.this);
+                                    } else if (type_userChecked == writer) {
+                                        new Writer(5, username.getText().toString(), "", email.getText().toString(), mdp.getText().toString(), nation.getText().toString(), "", ccp.getText().toString()).signUp(SignUp.this);
+                                    } else {
+                                        new Narrator(5, username.getText().toString(), "", email.getText().toString(), mdp.getText().toString(), nation.getText().toString(), "", ccp.getText().toString()).signUp(SignUp.this);
+                                    }
                                 }
                             }
                         }
 
-
-                        /*
-                        final HashMap<String,String> data =new HashMap<String,String> ();
-
-                        data.put("request","inscription");
-                        data.put("username",username.getText().toString());
-                        data.put("mdp",mdp.getText().toString());
-                        data.put("email",email.getText().toString());
-                        data.put("nation",nation.getText().toString()+"");
-                        //data.put("phone",.getText().toString());
-
-                        if (type_userChecked==reader){
-                            data.put("type_user","reader");
-                        }else if(type_userChecked==writer){
-                            data.put("type_user","writer");
-                            data.put("ccp",ccp.getText().toString());
-                        }else {
-                            data.put("type_user","narrator");
-                            data.put("ccp",ccp.getText().toString());
-                        }
-
-                        Login.ajax.setUrlWrite("/write.php");
-                        Login.ajax.send(data, new PostServerRequest5.doBeforAndAfterGettingData() {
-                            @Override
-                            public void before() {
-                                progress.setTitle("Uploading");
-                                progress.setMessage("Please wait...");
-                                progress.show();
-                            }
-
-                            @Override
-                            public void echec(Exception e) {
-                                progress.dismiss();
-                                e.printStackTrace();
-
-                            }
-
-                            @Override
-                            public void After(String result) {
-                                progress.dismiss();
-
-                                if(result.equals("email err")){
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.signUp_email_err),Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                }else if (result.equals("succ")){
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.signUp_succ),Toast.LENGTH_SHORT).show();
-                                            revenirLogin();
-                                        }
-                                    });
-
-                                }
-
-                            }
-                        });
-                        */
                     }
-
-
-
-
                 }
             });
-
             //endregion
         }
 

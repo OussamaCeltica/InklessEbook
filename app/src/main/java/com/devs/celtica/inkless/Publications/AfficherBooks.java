@@ -56,7 +56,7 @@ public class AfficherBooks extends AppCompatActivity {
             mRecyclerView.setAdapter(mAdapter);
 
             Login.ajax.setUrlWrite("/read.php");
-            ((Writer)Login.reader).getBooks(new PostServerRequest5.doBeforAndAfterGettingData() {
+            ((Writer)Login.reader).getBooks(0,new PostServerRequest5.doBeforAndAfterGettingData() {
                 @Override
                 public void before() {
                     progress.show();
@@ -73,25 +73,7 @@ public class AfficherBooks extends AppCompatActivity {
                 public void After(String result) {
                     Log.e("bbb",result+"");
                     progress.dismiss();
-                    Writer auteur=new Writer(Login.reader.id_user,Login.reader.nom);
-
-                    try {
-                        JSONArray r=new JSONArray(result);
-                        for (int i=0;i<r.length();i++){
-                            JSONObject obj=r.getJSONObject(i);
-                            AfficherBookAdapter.books.add(new Book(obj.getInt("id_pub"),obj.getString("lien_resume"),obj.getString("lien"),obj.getString("photo"),obj.getString("maison_edition"),obj.getString("nom1"),obj.getString("nom2"),obj.getString("date"),auteur,true,0,0));
-                        }
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                mAdapter.notifyDataSetChanged();
-                            }
-                        });
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-
+                    mAdapter.addBooks(result);
                 }
             });
 

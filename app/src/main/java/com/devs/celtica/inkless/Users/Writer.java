@@ -36,10 +36,11 @@ public class Writer extends ReaderFull{
         sendUserINfosToServer(c,data);
     }
 
-    public void getBooks(PostServerRequest5.doBeforAndAfterGettingData callback){
+    public void getBooks(int offset ,PostServerRequest5.doBeforAndAfterGettingData callback){
         HashMap<String,String> data=new HashMap<>();
         data.put("user",id_user+"");
-        Login.ajax.read("select * from publication pub inner join book on book.id_book=pub.id_pub and book.id_writter=? order by id_pub desc", data,callback);
+        Login.ajax.setUrlRead("/read.php");
+        Login.ajax.read("select * from publication pub inner join book on book.id_book=pub.id_pub and book.id_writter=? order by id_pub desc limit 60 OFFSET "+offset, data,callback);
     }
 
 

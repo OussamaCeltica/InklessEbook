@@ -10,6 +10,7 @@ import com.devs.celtica.inkless.Activities.Login;
 import com.devs.celtica.inkless.PostServerRequest5;
 import com.devs.celtica.inkless.R;
 import com.github.barteksc.pdfviewer.PDFView;
+import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 
 import java.io.InputStream;
 
@@ -34,7 +35,7 @@ public class OpenPdf extends AppCompatActivity {
 
 
             //Log.e("ppp",Login.ajax.url+"/"+AfficherBookAdapter.books.get(AfficherBookAdapter.ItemSelected).lien);
-            Login.ajax.setUrlRead("/"+AfficherBookAdapter.books.get(AfficherBookAdapter.ItemSelected).lien);
+            Login.ajax.setUrlRead("/"+ProfileBook.book.lien);
             Login.ajax.readPdfFile(this, new PostServerRequest5.doBeforAndAfterGettingFile() {
                 @Override
                 public void before() {
@@ -49,8 +50,13 @@ public class OpenPdf extends AppCompatActivity {
 
                 @Override
                 public void After(InputStream result) {
-                    pdfView.fromStream(result).load();//from server ..
-                    progress.dismiss();
+                    pdfView.fromStream(result).onLoad(new OnLoadCompleteListener() {
+                        @Override
+                        public void loadComplete(int nbPages) {
+                            progress.dismiss();
+                        }
+                    }).load();//from server ..
+
                 }
             });
         }

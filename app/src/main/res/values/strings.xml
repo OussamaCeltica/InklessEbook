@@ -38,6 +38,7 @@
     <string name="login_mdp_err">كلمة السر خاطئة.</string>
 
     <!--String de upload pdf -->
+    <string name="writer_noContrat">عليك بتجديد الاشتراك لكي تستطيع تحميل كتب اخرى ..</string>
     <string name="uploadBook_upload">رفع</string>
     <string name="uploadBook_resume">1.مقدمة الكتاب لوحدها</string>
     <string name="uploadBook_pdfComplet">2.الكتاب كاملا</string>

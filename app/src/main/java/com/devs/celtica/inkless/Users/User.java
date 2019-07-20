@@ -267,6 +267,7 @@ public class User {
                                                 if(!user.getString("licence_reader").equals("null") && user.getInt("licence_reader")>0){
                                                     Login.reader.contrat_reader_valide=true;
                                                 }
+
                                             }
                                         }
                                         //endregion

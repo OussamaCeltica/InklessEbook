@@ -3,17 +3,20 @@ package com.devs.celtica.inkless.Publications;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.devs.celtica.inkless.Activities.Accueil;
 import com.devs.celtica.inkless.Activities.Login;
 import com.devs.celtica.inkless.R;
 import com.squareup.picasso.Picasso;
 
 public class ProfileBook extends AppCompatActivity {
 
+    public static Book book;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +31,18 @@ public class ProfileBook extends AppCompatActivity {
             startActivity(intent);
             //endregion
         }else {
-            ((TextView)findViewById(R.id.profileBook_writer)).setText(AfficherBookAdapter.books.get(AfficherBookAdapter.ItemSelected).auteur.nom);
-            ((TextView)findViewById(R.id.profileBook_nom1)).setText(AfficherBookAdapter.books.get(AfficherBookAdapter.ItemSelected).nom1);
-            ((TextView)findViewById(R.id.profileBook_nom2)).setText(AfficherBookAdapter.books.get(AfficherBookAdapter.ItemSelected).nom2);
+
+            if(getIntent().getExtras() != null){
+                book= Accueil.selectedBook;
+                Log.e("rrr","gooood");
+            }else {
+                book=AfficherBookAdapter.books.get(AfficherBookAdapter.ItemSelected);
+            }
+            ((TextView)findViewById(R.id.profileBook_writer)).setText(book.auteur.nom);
+            ((TextView)findViewById(R.id.profileBook_nom1)).setText(book.nom1);
+            ((TextView)findViewById(R.id.profileBook_nom2)).setText(book.nom2);
             Picasso.get()
-                    .load(Login.ajax.url+"/"+AfficherBookAdapter.books.get(AfficherBookAdapter.ItemSelected).photo)
+                    .load(Login.ajax.url+"/"+book.photo)
                     .placeholder(R.drawable.bg_butt_bleu_fonce)
                     .error(R.drawable.bg_inp)
                     .into(((ImageView)findViewById(R.id.profileBook_photo)));
