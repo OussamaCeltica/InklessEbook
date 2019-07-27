@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
+import com.devs.celtica.inkless.Activities.Accueil;
+import com.devs.celtica.inkless.Activities.SearchBook;
 import com.devs.celtica.inkless.Users.Profile;
 
 
@@ -21,11 +23,6 @@ public class BottiomMenu extends Fragment {
     public BottiomMenu() {
         // Required empty public constructor
     }
-
-
-
-
-
 
     public static BottiomMenu newInstance() {
         BottiomMenu fragment = new BottiomMenu();
@@ -49,15 +46,30 @@ public class BottiomMenu extends Fragment {
         LinearLayout saving=v.findViewById(R.id.bottom_menu_saving);
         LinearLayout accueil=v.findViewById(R.id.bottom_menu_accueil);
 
+        accueil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(c, Accueil.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                c.startActivity(i);
+            }
+        });
+
         profile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 Intent i=new Intent(c, Profile.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                c.startActivity(i);
+            }
+        });
 
-                c.startActivity(new Intent(c, Profile.class));
-
-
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i=new Intent(c, SearchBook.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                c.startActivity(i);
             }
         });
         return v;

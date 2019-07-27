@@ -104,6 +104,16 @@ public class AfficherBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     c.startActivity(new Intent(c,ProfileBook.class));
                 }
             });
+
+            ((BookView)holder).photo.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    ItemSelected=position;
+                    UploadAudio.book=books.get(position);
+                    c.startActivity(new Intent(c,UploadAudio.class));
+                    return false;
+                }
+            });
         }else {
             if(books.size() % 60 == 0){
                 ((AddPlusView)holder).addPlusButt.setOnClickListener(new View.OnClickListener() {
@@ -162,7 +172,7 @@ public class AfficherBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             JSONArray r=new JSONArray(JSONResult);
             for (int i=0;i<r.length();i++){
                 JSONObject obj=r.getJSONObject(i);
-                AfficherBookAdapter.books.add(new Book(obj.getInt("id_pub"),obj.getString("lien_resume"),obj.getString("lien"),obj.getString("photo"),obj.getString("maison_edition"),obj.getString("nom1"),obj.getString("nom2"),obj.getString("date"),auteur,true,0,0));
+                AfficherBookAdapter.books.add(new Book(obj.getInt("id_pub"),obj.getString("lien_resume"),obj.getString("lien"),obj.getString("photo"),obj.getString("maison_edition"),obj.getString("nom1"),obj.getString("nom2"),obj.getString("category"),obj.getString("date"),auteur,true,0,0));
             }
             c.runOnUiThread(new Runnable() {
                 @Override

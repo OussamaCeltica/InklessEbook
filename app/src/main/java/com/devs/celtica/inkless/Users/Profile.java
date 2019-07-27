@@ -50,7 +50,6 @@ public class Profile extends AppCompatActivity {
 
                 user_type.setText(getResources().getString(R.string.signUp_writer));
 
-
                 //region voir stat ..
                 ((LinearLayout)findViewById(R.id.profile_stat)).setOnClickListener(new View.OnClickListener() {
                     @Override

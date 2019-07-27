@@ -1,6 +1,9 @@
 package com.devs.celtica.inkless.Publications;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,14 +11,21 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.devs.celtica.inkless.Activities.Accueil;
 import com.devs.celtica.inkless.Activities.Login;
 import com.devs.celtica.inkless.R;
 
+
+
 public class UploadAudio extends AppCompatActivity {
 
-    AudioUploadAdapter mAdapter;
+    TrackUploadAdapter mAdapter;
+    public static Book book;
+    public  static boolean isSended=false;
+    AlertDialog ad;
+    public ProgressDialog progress;
+    View progressView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +37,13 @@ public class UploadAudio extends AppCompatActivity {
             startActivity(intent);
             //endregion
         }else {
+
+            progress=new ProgressDialog(this);
+
+            progressView= getLayoutInflater().inflate(R.layout.div_progressbar,null);
+            AlertDialog.Builder mb = new AlertDialog.Builder(this); //c est l activity non le context ..
+            mb.setView(progressView);
+            ad=mb.create();
 
             //region Configuration de recyclervew ..
             final RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.div_upload_audio);
@@ -41,7 +58,7 @@ public class UploadAudio extends AppCompatActivity {
 
 
             // specify an adapter (see also next example)
-            mAdapter = new AudioUploadAdapter(UploadAudio.this);
+            mAdapter = new TrackUploadAdapter(UploadAudio.this);
 
             mRecyclerView.setAdapter(mAdapter);
             ItemTouchHelper itemTouchHelper=new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -53,7 +70,7 @@ public class UploadAudio extends AppCompatActivity {
                 @Override
                 public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                     int position = viewHolder.getAdapterPosition();
-                    AudioUploadAdapter.audios.remove(position);
+                    TrackUploadAdapter.audios.remove(position);
                     mAdapter.notifyDataSetChanged();
                 }
             });
@@ -61,24 +78,64 @@ public class UploadAudio extends AppCompatActivity {
 
             int i=0;
             while (i != 6){
-                AudioUploadAdapter.audios.add(new AudioForUpload());
+                TrackUploadAdapter.audios.add(new TrackForUpload());
                 i++;
 
             }
             mAdapter.notifyDataSetChanged();
-            //endregion
 
+            //region ajouter un champ de nouveau track..
             ((TextView)findViewById(R.id.uploadAudio_addPlus)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    AudioUploadAdapter.audios.add(new AudioForUpload());
+                    TrackUploadAdapter.audios.add(new TrackForUpload());
                     mAdapter.notifyItemInserted(mAdapter.getItemCount());
-                    mRecyclerView.scrollToPosition(AudioUploadAdapter.audios.size()-1);
+                    mRecyclerView.scrollToPosition(TrackUploadAdapter.audios.size()-1);
 
                 }
             });
+            //endregion
+
+            //endregion
+
+            //region valider upload l audio ..
+            ((TextView)findViewById(R.id.uploadAudio_valider)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(mAdapter.isPanierVide()){
+                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.uploadAudio_noAudio),Toast.LENGTH_SHORT).show();
+                    }else {
+                        if (!isSended) {
+                            isSended=true;
+                            AudioWriter audio=new AudioWriter(book.id_pub,Login.reader.id_user);
+                            audio.uploadAudio(UploadAudio.this,TrackUploadAdapter.audios);
+                        }else {
+                            ad.show();
+                        }
+
+
+                    }
+                }
+            });
+            //endregion
 
         }
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == RESULT_OK){
+            Uri file=data.getData();
+            TrackUploadAdapter.audios.get(TrackUploadAdapter.itemSelected).audioFile=file;
+            mAdapter.notifyItemChanged(TrackUploadAdapter.itemSelected);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        TrackUploadAdapter.audios.clear();
     }
 }

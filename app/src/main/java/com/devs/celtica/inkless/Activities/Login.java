@@ -65,11 +65,8 @@ public class Login extends AppCompatActivity {
                     User user=new User(email.getText().toString(),mdp.getText().toString());
                     user.connecter(Login.this);
                 }
-
-
             }
         });
-
         //endregion
 
         //region sign up ..
@@ -84,8 +81,5 @@ public class Login extends AppCompatActivity {
         });
         //endregion
 
-
     }
-
-
 }

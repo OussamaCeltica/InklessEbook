@@ -8,24 +8,12 @@
     android:background="@drawable/bg2"
     tools:context="com.devs.celtica.inkless.Users.Profile">
 
-    <FrameLayout
+    <fragment
+        android:name="com.devs.celtica.inkless.HeaderFrag"
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:orientation="horizontal"
-        android:background="@android:color/transparent">
-        <ImageView
-            android:layout_width="45dp"
-            android:layout_height="match_parent"
-            android:src="@drawable/backk"/>
-        <ImageView
-            android:layout_width="200dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginTop="2dp"
-            android:scaleX="1.9"
-            android:scaleY="1.9"
-            android:src="@drawable/logo"/>
-    </FrameLayout>
+        />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -211,7 +199,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="30dp"
                     android:layoutDirection="rtl"
                     android:orientation="vertical">
 
@@ -265,7 +253,7 @@
                             android:text="@string/profileBook_edition"/>
                         <TextView
                             android:id="@+id/profileBook_maisonEdition"
-                            android:layout_width="130dp"
+                            android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center|right"
                             android:layout_gravity="center"
@@ -282,6 +270,38 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="10dp"
                         android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layoutDirection="rtl"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="130dp"
+                            android:layout_height="match_parent"
+                            android:gravity="center|right"
+                            android:layout_gravity="center"
+                            android:fontFamily="@font/font1"
+                            android:textColor="@color/BleuFonce"
+                            android:textSize="22sp"
+                            android:text="@string/profileBook_category"/>
+                        <TextView
+                            android:id="@+id/profileBook_category"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center|right"
+                            android:layout_gravity="center"
+                            android:fontFamily="@font/font1"
+                            android:textColor="@color/BleuFonce"
+                            android:textSize="22sp"
+                            android:text="رواية رمنسية مليءة بالحب"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
                         android:layoutDirection="rtl"
                         android:orientation="horizontal">
 
@@ -296,48 +316,16 @@
                             android:text="@string/profileBook_dateEdition"/>
                         <TextView
                             android:id="@+id/profileBook_date"
-                            android:layout_width="130dp"
-                            android:layout_height="match_parent"
-                            android:gravity="center|right"
-                            android:layout_gravity="center"
-                            android:fontFamily="@font/font1"
-                            android:textColor="@color/BleuFonce"
-                            android:textSize="18sp"
-                            android:text="2018-05-06"/>
-
-                    </LinearLayout>
-
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginLeft="10dp"
-                        android:layoutDirection="rtl"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="130dp"
+                            android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center|right"
                             android:layout_gravity="center"
                             android:fontFamily="@font/font1"
                             android:textColor="@color/BleuFonce"
                             android:textSize="22sp"
-                            android:text="@string/profileBook_dateEdition"/>
-                        <TextView
-                            android:layout_width="130dp"
-                            android:layout_height="match_parent"
-                            android:gravity="center|right"
-                            android:layout_gravity="center"
-                            android:fontFamily="@font/font1"
-                            android:textColor="@color/BleuFonce"
-                            android:textSize="18sp"
                             android:text="2018-05-06"/>
 
                     </LinearLayout>
-
 
 
                 </LinearLayout>
@@ -448,127 +436,13 @@
         </LinearLayout>
 
         <!-- Bottom Menu -->
-        <LinearLayout
+        <fragment
+            android:name="com.devs.celtica.inkless.BottiomMenu"
+            android:id="@+id/bottom_menu"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:padding="8dp"
             android:layout_gravity="bottom"
-            android:orientation="horizontal"
-            android:background="@color/BleuNuit">
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/user2"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1.6"
-                    android:gravity="center"
-                    android:fontFamily="@font/font1"
-                    android:textColor="@color/white"
-                    android:textSize="11sp"
-                    android:text="@string/profile_user"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/stat"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1.6"
-                    android:gravity="center"
-                    android:fontFamily="@font/font1"
-                    android:textColor="@color/white"
-                    android:textSize="11sp"
-                    android:text="@string/profile_bestSel"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/loop"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1.6"
-                    android:gravity="center"
-                    android:fontFamily="@font/font1"
-                    android:textColor="@color/white"
-                    android:textSize="11sp"
-                    android:text="@string/profile_search"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/prize"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1.6"
-                    android:gravity="center"
-                    android:fontFamily="@font/font1"
-                    android:textColor="@color/white"
-                    android:textSize="11sp"
-                    android:text="@string/profile_saves"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:src="@drawable/home"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1.6"
-                    android:gravity="center"
-                    android:fontFamily="@font/font1"
-                    android:textColor="@color/white"
-                    android:textSize="11sp"
-                    android:text="@string/profile_home"/>
-
-            </LinearLayout>
-
-
-        </LinearLayout>
+            />
     </FrameLayout>
 
 </LinearLayout>

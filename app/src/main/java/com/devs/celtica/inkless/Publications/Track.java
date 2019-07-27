@@ -11,30 +11,23 @@ package com.devs.celtica.inkless.Publications;
  */
 public class Track {
     
-private int id_track;
-private String lien;
+public int id_track;
+public String lien,titre;
 
-    public Track(int id_track, String lien) {
+
+    public Track(String titre) {
+        this.titre = titre;
+    }
+
+    public Track( ) {
+
+    }
+
+    public Track(int id_track, String titre, String lien) {
         this.id_track = id_track;
+        this.titre=titre;
         this.lien = lien;
     }
 
-    public int getId_track() {
-        return id_track;
-    }
 
-    public void setId_track(int id_track) {
-        this.id_track = id_track;
-    }
-
-    public String getLien() {
-        return lien;
-    }
-
-    public void setLien(String lien) {
-        this.lien = lien;
-    }
-    
-
-    
 }

@@ -84,7 +84,6 @@ public class UploadPdf extends AppCompatActivity {
             //endregion
 
 
-
             //region getResumePdf file ..
             resumeButt.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -117,6 +116,9 @@ public class UploadPdf extends AppCompatActivity {
 
             //region select book category ..
             ArrayList<String> categories=new ArrayList<>();
+            for (String cat:getResources().getStringArray(R.array.book_types)){
+                categories.add(cat);
+            }
             final SpinnerDialog spinnerCategories=new SpinnerDialog(UploadPdf.this,categories,"","Close");// With No Animation
 
 
@@ -183,38 +185,26 @@ public class UploadPdf extends AppCompatActivity {
                 public void onClick(View view) {
 
                     if (!isSended) {
-                    if(prixPdf.getText().equals("")){
-                        Toast.makeText(getApplicationContext(),getResources().getString(R.string.signUp_errRemplisage),Toast.LENGTH_SHORT).show();
-                    }else {
-                        if(hasPaperVersion.isChecked()){
-                            if (prixPaper.getText().toString().equals("")){
-                                Toast.makeText(getApplicationContext(),getResources().getString(R.string.signUp_errRemplisage),Toast.LENGTH_SHORT).show();
+                        if(prixPdf.getText().equals("")){
+                            Toast.makeText(getApplicationContext(),getResources().getString(R.string.signUp_errRemplisage),Toast.LENGTH_SHORT).show();
+                        }else {
+                            if(hasPaperVersion.isChecked()){
+                                if (prixPaper.getText().toString().equals("")){
+                                    Toast.makeText(getApplicationContext(),getResources().getString(R.string.signUp_errRemplisage),Toast.LENGTH_SHORT).show();
+                                }else {
+                                    isSended = true;
+                                    Book b = new Book(maisonEdition.getText().toString() + "", titre1.getText().toString() + "", titre2.getText().toString() + "", isbn.getText().toString() + "", decription.getText().toString() + "", category.getText().toString(), hasPaperVersion.isChecked(), Double.parseDouble(prixPaper.getText().toString()), Double.parseDouble(prixPdf.getText().toString()));
+                                    b.uploadBook(UploadPdf.this, files);
+                                }
                             }else {
-
-                                ((TextView)progressView.findViewById(R.id.div_progressbar_msg)).setText(getResources().getString(R.string.uploadBook_uploadWait));
-                                ad.show();
-                                ad.setCanceledOnTouchOutside(false); //ne pas fermer on click en dehors ..
-
                                 isSended = true;
-                                Book b = new Book(maisonEdition.getText().toString() + "", titre1.getText().toString() + "", titre2.getText().toString() + "", isbn.getText().toString() + "", decription.getText().toString() + "", category.getText().toString(), hasPaperVersion.isChecked(), Double.parseDouble(prixPaper.getText().toString()), Double.parseDouble(prixPdf.getText().toString()));
+                                Book b = new Book(maisonEdition.getText().toString() + "", titre1.getText().toString() + "", titre2.getText().toString() + "", isbn.getText().toString() + "", decription.getText().toString() + "", category.getText().toString(), hasPaperVersion.isChecked(), 0, Double.parseDouble(prixPdf.getText().toString()));
                                 b.uploadBook(UploadPdf.this, files);
                             }
-                        }else {
-
-                            ((TextView)progressView.findViewById(R.id.div_progressbar_msg)).setText(getResources().getString(R.string.uploadBook_uploadWait));
-                            ad.show();
-                            ad.setCanceledOnTouchOutside(false); //ne pas fermer on click en dehors ..
-
-                            isSended = true;
-                            Book b = new Book(maisonEdition.getText().toString() + "", titre1.getText().toString() + "", titre2.getText().toString() + "", isbn.getText().toString() + "", decription.getText().toString() + "", category.getText().toString(), hasPaperVersion.isChecked(), 0, Double.parseDouble(prixPdf.getText().toString()));
-                            b.uploadBook(UploadPdf.this, files);
                         }
-
+                    }else {
+                        ad.show();
                     }
-                }else {
-                    progress.setTitle(getResources().getString(R.string.uploadBook_uploadWait));
-                    progress.show();
-                }
                 }
             });
             //endregion

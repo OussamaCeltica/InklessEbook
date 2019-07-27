@@ -24,7 +24,7 @@ public class Book extends Publication{
     public double prixPaper,prixPdf;
     public Writer auteur;
 
-    public Book(int id_pub, String lien_resume, String lien, String photo, String maison_edition_auteur, String nom1, String nom2, String date_pub,Writer auteur,boolean hasPaperVersion, double prixPaper, double prixPdf) {
+    public Book(int id_pub, String lien_resume, String lien, String photo, String maison_edition_auteur, String nom1, String nom2, String categorie,String date_pub,Writer auteur,boolean hasPaperVersion, double prixPaper, double prixPdf) {
         super(id_pub, date_pub, "book", lien);
         this.lien_resume = lien_resume;
         this.photo = photo;
@@ -35,6 +35,7 @@ public class Book extends Publication{
         this.auteur=auteur;
     }
 
+    //this contruct for uploading to BD ..
     public Book(String maison_edition_auteur, String nom1, String nom2, String isbn, String description,String categorie, boolean hasPaperVersion, double prixPaper, double prixPdf) {
         this.maison_edition = maison_edition_auteur;
         this.nom1 = nom1;
@@ -51,6 +52,7 @@ public class Book extends Publication{
         Login.ajax.setUrlWrite("/upload_files.php");
         HashMap<String,String> data=new HashMap<String,String>();
 
+        data.put("upload_type","book");
         data.put("writer",Login.reader.id_user+"");
         data.put("categorie",categorie);
         data.put("titre1",nom1);
@@ -76,6 +78,10 @@ public class Book extends Publication{
 
             @Override
             public void before() {
+                UploadPdf cc=(UploadPdf)c;
+                ((TextView)cc.progressView.findViewById(R.id.div_progressbar_msg)).setText(cc.getResources().getString(R.string.uploadBook_uploadWait));
+                cc.ad.show();
+                cc.ad.setCanceledOnTouchOutside(false); //ne pas fermer on click en dehors ..
 
             }
 
@@ -100,7 +106,7 @@ public class Book extends Publication{
                 Log.e("rrr","upload msg: "+result+" / "+result.trim().length());
                 ((UploadPdf)c).ad.dismiss();
                 UploadPdf.isSended=false;
-                if (result.trim().equals("good")){
+                if (result.replaceAll("\n","").trim().equals("good")){
                     //c.finish();
                     c.runOnUiThread(new Runnable() {
                         @Override

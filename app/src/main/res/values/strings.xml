@@ -81,11 +81,13 @@
     <string name="profileBook_rating">التقييم:</string>
     <string name="profileBook_dateEdition">تاريخ الاصدار:</string>
     <string name="profileBook_edition">الناشر:</string>
+    <string name="profileBook_category">نوع التأليف:</string>
     <string name="signUp_cnct_err">تأكد من اتصالك بالانترنت ..</string>
 
     <!-- String pour l upload des audio -->
     <string name="uploadAudio_titre">عنوان المقطع</string>
     <string name="uploadAudio_addPlus">+اضافة المزيد</string>
+    <string name="uploadAudio_noAudio">ﻵ يوجد اي ملف للرفع.</string>
     <string name="uploadAudio_prixAudio">سعر الكتاب الصوتي</string>
     <string name="div_pub_choice">مانوع الملف الدي تريد رفعه</string>
     <string name="div_pub_choice_book">كتاب</string>
@@ -333,8 +335,32 @@
         <item>Zimbabwe</item>
     </string-array>
 
+    <!--String des Nations -->
+    <string-array name="book_types">
+        <item>كتب علمية</item>
+        <item>كتب دينية</item>
+        <item>روايات عالمية</item>
+        <item>العلوم والطبيعة</item>
+        <item>روايات عربية</item>
+        <item>علوم إجتماعية</item>
+        <item>كتب طب</item>
+        <item>كتب الخيال العلمي</item>
+        <item>علوم الحيوان</item>
+        <item>كتب طرائف ونوادر</item>
+        <item>طبخ وطعام</item>
+        <item>سلاسل و موسوعات</item>
+        <item>فنون</item>
+        <item>تنمية بشرية</item>
+        <item>دواوين شعر</item>
+        <item>علوم سياسية و عسكرية</item>
+        <item>حب ورومنسية</item>
+        <item>غموض و جرانم</item>
+        <item>قصص عربية</item>
+        <item>كتب أطفال</item>
+        <item>صحافة واعلام</item>
+    </string-array>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
 
 </resources>

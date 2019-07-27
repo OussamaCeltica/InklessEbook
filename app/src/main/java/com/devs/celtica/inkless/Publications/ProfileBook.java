@@ -34,13 +34,17 @@ public class ProfileBook extends AppCompatActivity {
 
             if(getIntent().getExtras() != null){
                 book= Accueil.selectedBook;
-                Log.e("rrr","gooood");
             }else {
                 book=AfficherBookAdapter.books.get(AfficherBookAdapter.ItemSelected);
             }
+
+            //region remplssage des infos de book ..
             ((TextView)findViewById(R.id.profileBook_writer)).setText(book.auteur.nom);
             ((TextView)findViewById(R.id.profileBook_nom1)).setText(book.nom1);
             ((TextView)findViewById(R.id.profileBook_nom2)).setText(book.nom2);
+            ((TextView)findViewById(R.id.profileBook_maisonEdition)).setText(book.maison_edition);
+            ((TextView)findViewById(R.id.profileBook_date)).setText(book.date_pub);
+            ((TextView)findViewById(R.id.profileBook_category)).setText(book.categorie);
             Picasso.get()
                     .load(Login.ajax.url+"/"+book.photo)
                     .placeholder(R.drawable.bg_butt_bleu_fonce)
@@ -54,6 +58,7 @@ public class ProfileBook extends AppCompatActivity {
 
                 }
             });
+            //endregion
         }
     }
 }

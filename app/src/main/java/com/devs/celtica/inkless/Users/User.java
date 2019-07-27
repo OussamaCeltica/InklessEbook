@@ -327,7 +327,10 @@ public class User {
             }
             break;
             case AUDIO:{
-
+                Intent i2=new Intent();
+                i2.setType("audio/*");
+                i2.setAction(Intent.ACTION_GET_CONTENT);
+                c.startActivityForResult(i2,3);
             }break;
             case PHOTO:{
                 Intent i2=new Intent();

@@ -149,7 +149,7 @@ public class PostServerRequest5 {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
 
-                        queryResult=response.body().string().replaceAll("\n","");
+                        queryResult=response.body().string();
                         d.After(queryResult);
                     }
                 });
@@ -194,7 +194,7 @@ public class PostServerRequest5 {
                 request_body=mb.build();
 
                 Request request = new Request.Builder()
-                        .url(url+urlRead)
+                        .url(url+urlWrite)
 
                         .post(request_body)
                         .build();
@@ -208,7 +208,7 @@ public class PostServerRequest5 {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
 
-                        queryResult=response.body().string().replaceAll("\n","");
+                        queryResult=response.body().string();
                         d.After(queryResult);
                     }
                 });
@@ -265,7 +265,7 @@ public class PostServerRequest5 {
                     public void onResponse(Call call, Response response) throws IOException {
 
 
-                       queryResult=response.body().string().replaceAll("\n","").trim();
+                       queryResult=response.body().string();
                         d.After(queryResult);
 
                         /*-------- Manipulation de resultats ----------
