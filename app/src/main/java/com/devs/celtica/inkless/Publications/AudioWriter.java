@@ -7,6 +7,8 @@ package com.devs.celtica.inkless.Publications;
 
 import android.support.v7.app.AppCompatActivity;
 
+import com.devs.celtica.inkless.Users.Writer;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -16,20 +18,23 @@ import java.util.HashMap;
  */
 public class AudioWriter extends Audio{
 
-    public int id_writer;
-    public AudioWriter(String nom, int id_pub, String date_pub, String type, String lien) {
-        super(nom, id_pub, date_pub, type, lien);
+    public Writer writer;
+
+    //pour l affichages des audios ..
+    public AudioWriter(String nom, int id_pub, int id_book, String date_pub,Writer w) {
+        super(nom, id_pub, id_book,date_pub);
+        this.writer=w;
     }
 
-    public AudioWriter(int id_pub,int id_writer) {
-        super(id_pub);
-        this.id_writer=id_writer;
+    public AudioWriter(int id_book , Writer writer) {
+        super(id_book);
+        this.writer = writer;
     }
 
     public void uploadAudio(AppCompatActivity c, ArrayList<TrackForUpload> tracks){
         HashMap<String,String> datas=new HashMap<>();
         datas.put("audio_for","writer");
-        datas.put("id_writer",""+id_writer);
+        datas.put("id_writer",""+writer.id_user);
         super.uploadAudio(c,datas,tracks);
 
     }

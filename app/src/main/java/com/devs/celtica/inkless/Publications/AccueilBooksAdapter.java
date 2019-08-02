@@ -19,6 +19,7 @@ import com.devs.celtica.inkless.Activities.Accueil;
 import com.devs.celtica.inkless.Activities.Login;
 import com.devs.celtica.inkless.PostServerRequest5;
 import com.devs.celtica.inkless.R;
+import com.devs.celtica.inkless.Users.Profile;
 import com.devs.celtica.inkless.Users.Writer;
 import com.squareup.picasso.Picasso;
 
@@ -100,12 +101,12 @@ public class AccueilBooksAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                     Intent i=new Intent(c,ProfileBook.class);
                     i.putExtra("request","accueil");
-                    Accueil.selectedBook=books.get(position);
+                    ProfileBook.book =books.get(position);
                     c.startActivity(i);
                 }
             });
         }else {
-            if(books.size() % 60 == 0){
+            if(books.size() % 60 == 0 && books.size() != 0){
                 ((AddPlusView)holder).addPlusButt.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

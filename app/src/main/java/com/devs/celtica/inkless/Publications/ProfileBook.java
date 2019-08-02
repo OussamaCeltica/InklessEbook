@@ -9,8 +9,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.devs.celtica.inkless.Activities.Accueil;
 import com.devs.celtica.inkless.Activities.Login;
+import com.devs.celtica.inkless.PostServerRequest5;
 import com.devs.celtica.inkless.R;
 import com.squareup.picasso.Picasso;
 
@@ -32,11 +35,7 @@ public class ProfileBook extends AppCompatActivity {
             //endregion
         }else {
 
-            if(getIntent().getExtras() != null){
-                book= Accueil.selectedBook;
-            }else {
-                book=AfficherBookAdapter.books.get(AfficherBookAdapter.ItemSelected);
-            }
+
 
             //region remplssage des infos de book ..
             ((TextView)findViewById(R.id.profileBook_writer)).setText(book.auteur.nom);
@@ -45,11 +44,13 @@ public class ProfileBook extends AppCompatActivity {
             ((TextView)findViewById(R.id.profileBook_maisonEdition)).setText(book.maison_edition);
             ((TextView)findViewById(R.id.profileBook_date)).setText(book.date_pub);
             ((TextView)findViewById(R.id.profileBook_category)).setText(book.categorie);
-            Picasso.get()
+            Glide.with(ProfileBook.this)
                     .load(Login.ajax.url+"/"+book.photo)
-                    .placeholder(R.drawable.bg_butt_bleu_fonce)
-                    .error(R.drawable.bg_inp)
+                    .thumbnail(Glide.with(ProfileBook.this).load(R.drawable.wait))
+                    .error(Glide.with(ProfileBook.this).load(R.drawable.bg_butt_bleu_fonce))
+                    .apply(new RequestOptions().override(400, 600))
                     .into(((ImageView)findViewById(R.id.profileBook_photo)));
+            //endregion
 
             ((LinearLayout)findViewById(R.id.profileBook_readButt)).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -58,7 +59,14 @@ public class ProfileBook extends AppCompatActivity {
 
                 }
             });
-            //endregion
+
+            ((LinearLayout)findViewById(R.id.profileBook_audioButt)).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(ProfileBook.this,AfficherAudio.class));
+
+                }
+            });
         }
     }
 }

@@ -84,6 +84,9 @@
     <string name="profileBook_category">نوع التأليف:</string>
     <string name="signUp_cnct_err">تأكد من اتصالك بالانترنت ..</string>
 
+    <string name="profile_photoChange">تغيير الصورة</string>
+    <string name="profile_photoAffiche">فتح الصورة</string>
+
     <!-- String pour l upload des audio -->
     <string name="uploadAudio_titre">عنوان المقطع</string>
     <string name="uploadAudio_addPlus">+اضافة المزيد</string>
@@ -96,6 +99,8 @@
     <string name="div_confirm_oui">نعم</string>
     <string name="profileBook_writer">اسم الكاتب:</string>
 
+    <!-- String pour  la recherche des livres -->
+    <string name="searchBook_hint">بحث ..</string>
 
     <!--String des Nations -->
     <string-array name="nations_array">

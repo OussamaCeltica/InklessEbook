@@ -28,13 +28,14 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class AfficherBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AfficherBookSearchADapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     AppCompatActivity c;
-    public static ArrayList<Book> books=new  ArrayList<Book>();
+    public   ArrayList<Book> books=new  ArrayList<Book>();
     public static int ItemSelected;
+    public String hint;
 
-    public AfficherBookAdapter(AppCompatActivity c) {
+    public AfficherBookSearchADapter(AppCompatActivity c) {
         this.c = c;
 
     }
@@ -95,7 +96,8 @@ public class AfficherBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     .apply(new RequestOptions().override(400, 600))
                     .into(((BookView)holder).photo);
 
-            //region open book profile ..
+
+
             ((BookView)holder).photo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -104,19 +106,7 @@ public class AfficherBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     c.startActivity(new Intent(c,ProfileBook.class));
                 }
             });
-            //endregion
 
-            //region open upload audiio ..
-            ((BookView)holder).photo.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    ItemSelected=position;
-                    UploadAudio.book=books.get(position);
-                    c.startActivity(new Intent(c,UploadAudio.class));
-                    return false;
-                }
-            });
-            //endregion
 
         }else {
             if(books.size() % 60 == 0 && books.size() != 0){
@@ -124,7 +114,7 @@ public class AfficherBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     @Override
                     public void onClick(View view) {
 
-                        ((Writer)Login.reader).getBooks(books.size(), new PostServerRequest5.doBeforAndAfterGettingData() {
+                        Login.reader.getSearchBook(books.size(),hint ,new PostServerRequest5.doBeforAndAfterGettingData() {
                             @Override
                             public void before() {
 
@@ -171,12 +161,13 @@ public class AfficherBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public void addBooks(String JSONResult){
-        Writer auteur=new Writer(Login.reader.id_user,Login.reader.nom);
+
         try {
             JSONArray r=new JSONArray(JSONResult);
             for (int i=0;i<r.length();i++){
                 JSONObject obj=r.getJSONObject(i);
-                AfficherBookAdapter.books.add(new Book(obj.getInt("id_pub"),obj.getString("lien_resume"),obj.getString("lien"),obj.getString("photo"),obj.getString("maison_edition"),obj.getString("nom1"),obj.getString("nom2"),obj.getString("category"),obj.getString("date"),auteur,true,0,0));
+                Writer auteur=new Writer(obj.getInt("id_writter"),obj.getString("nom"));
+                books.add(new Book(obj.getInt("id_pub"),obj.getString("lien_resume"),obj.getString("lien"),obj.getString("photo")+"",obj.getString("maison_edition"),obj.getString("nom1"),obj.getString("nom2"),obj.getString("category"),obj.getString("date"),auteur,true,0,0));
             }
             c.runOnUiThread(new Runnable() {
                 @Override

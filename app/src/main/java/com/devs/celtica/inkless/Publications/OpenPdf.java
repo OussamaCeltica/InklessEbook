@@ -5,14 +5,18 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.devs.celtica.inkless.Activities.Login;
 import com.devs.celtica.inkless.PostServerRequest5;
 import com.devs.celtica.inkless.R;
+import com.devs.celtica.inkless.Users.Writer;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
 
 import java.io.InputStream;
+
+
 
 public class OpenPdf extends AppCompatActivity {
 
@@ -34,8 +38,16 @@ public class OpenPdf extends AppCompatActivity {
             progress=new ProgressDialog(this);
 
 
-            //Log.e("ppp",Login.ajax.url+"/"+AfficherBookAdapter.books.get(AfficherBookAdapter.ItemSelected).lien);
-            Login.ajax.setUrlRead("/"+ProfileBook.book.lien);
+
+
+            String lien;
+            if (Login.reader.contrat_reader_valide ||  (Login.reader instanceof Writer && ((Writer)Login.reader).contrat_writer_valide) ){
+                lien=ProfileBook.book.lien;
+            }else {
+                lien=ProfileBook.book.lien_resume;
+            }
+
+            Login.ajax.setUrlRead("/"+lien);
             Login.ajax.readPdfFile(this, new PostServerRequest5.doBeforAndAfterGettingFile() {
                 @Override
                 public void before() {

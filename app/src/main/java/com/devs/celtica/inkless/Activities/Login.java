@@ -48,8 +48,9 @@ public class Login extends AppCompatActivity {
         mdp=(EditText)findViewById(R.id.login_mdp);
 
 
+        //final User user=new User("h@h","1");
         final User user=new User("a@a","1");
-        //user.connecter(Login.this);
+       // user.connecter(Login.this);
 
 
         //region connecter ..
@@ -73,10 +74,7 @@ public class Login extends AppCompatActivity {
         ((TextView)findViewById(R.id.login_signUpButt)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 startActivity(new Intent(Login.this,SignUp.class));
-
-
             }
         });
         //endregion

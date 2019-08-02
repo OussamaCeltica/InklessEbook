@@ -19,7 +19,7 @@ import org.json.JSONObject;
 
 public class Accueil extends AppCompatActivity {
 
-    public static Book selectedBook;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -36,8 +36,8 @@ public class ReaderFull extends User{
         sendUserINfosToServer(c,data);
     }
 
+    //Récupération des books ordonné par la category la plus lu par c Reader ..
     public void getBookOfBestCategory(int offset ,PostServerRequest5.doBeforAndAfterGettingData callback){
-
 
         HashMap<String,String> data=new HashMap<>();
         data.put("user",id_user+"");
@@ -53,7 +53,7 @@ public class ReaderFull extends User{
                 "        FROM reading r\n" +
                 "        INNER JOIN publication p ON p.id_pub=r.id_pub\n" +
                 "        INNER JOIN book b ON r.id_pub=b.id_book\n" +
-                "        WHERE r.id_reader='6'\n" +
+                "        WHERE r.id_reader=? \n" +
                 "        GROUP BY b.category\n" +
                 "        ORDER BY nbr_read DESC\n" +
                 "        LIMIT 1) AS tmp)\n" +
@@ -66,7 +66,6 @@ public class ReaderFull extends User{
     public void getBookOfBestSels(int offset ,PostServerRequest5.doBeforAndAfterGettingData callback){
 
         HashMap<String,String> data=new HashMap<>();
-        data.put("user",id_user+"");
         Login.ajax.setUrlRead("/read.php");
         Login.ajax.read("SELECT p.*, \n" +
                 "       b.*, \n" +

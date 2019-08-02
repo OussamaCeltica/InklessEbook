@@ -16,32 +16,40 @@ import android.widget.Toast;
 import com.devs.celtica.inkless.Activities.Login;
 import com.devs.celtica.inkless.PostServerRequest5;
 import com.devs.celtica.inkless.R;
+import com.devs.celtica.inkless.Users.ReaderFull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Audio extends Publication {
  public int  id_book;
+ public String nom;
 
- public Audio(String nom, int id_pub, String date_pub, String type, String lien){
+    public Audio(int id_book) {
+        this.id_book = id_book;
+    }
+
+    public Audio(String nom, int id_pub, int id_book, String date_pub){
+     super(id_pub,date_pub, "audio", "");
+     this.id_book=id_book;
+     this.nom=nom;
+
 
  }
 
-    public Audio(  int id_pub, int id_book,String date_pub, String lien) {
-        super(id_pub,date_pub, "audio", lien);
+    public Audio(int id_pub, int id_book,String date_pub) {
+        super(id_pub,date_pub, "audio", "");
 
         this.id_book=id_book;
     }
 
-    public Audio( int id_book){
+    public Audio(String nom, int id_book, String date_pub, String type, String lien){
         this.id_book=id_book;
 
     }
 
-    public ArrayList<Track> getTrack(){
-        ArrayList<Track> tracks=new ArrayList<Track>();
+    public void getTrack(){
 
-        return tracks;
     }
 
     public void uploadAudio(final AppCompatActivity c,HashMap<String,String> datas ,ArrayList<TrackForUpload> tracks){

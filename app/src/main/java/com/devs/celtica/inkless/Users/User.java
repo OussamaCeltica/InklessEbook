@@ -13,6 +13,8 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.devs.celtica.inkless.Activities.Accueil;
@@ -28,9 +30,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.security.NoSuchAlgorithmException;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static android.bluetooth.BluetoothClass.Service.AUDIO;
+import static android.content.Context.INPUT_METHOD_SERVICE;
 
 /**
  *
@@ -255,15 +260,23 @@ public class User {
                                         JSONArray r = new JSONArray(result);
                                         JSONObject user=r.getJSONObject(0);
 
-                                        //region testé si le user est un writter ou reader ..
+                                        //region testé si le user est un writter ou narrator ou reader  ..
                                         if (!user.getString("id_writer").equals("null")){
-                                            Login.reader=new Writer(user.getInt("id_writer"),user.getString("nom")+"","",user.getString("nom")+"",user.getString("mdp")+"","","",user.getString("writer_ccp"));
+                                            Login.reader=new Writer(user.getInt("id_writer"),user.getString("nom")+"","",user.getString("nom")+"",user.getString("mdp")+"",user.getString("nation")+"",user.getString("photo")+"",user.getString("writer_ccp"));
                                             if(!user.getString("licence_writer").equals("null") && user.getInt("licence_writer")>0){
                                                 ((Writer)Login.reader).contrat_writer_valide=true;
                                             }
-                                        }else {
+                                        }
+                                        //region testé si le user est un narrator
+                                        else if(!user.getString("id_narrator").equals("null")){
+                                            Login.reader=new Narrator(user.getInt("id_narrator"),user.getString("nom")+"","",user.getString("nom")+"",user.getString("mdp")+"",user.getString("nation")+"",user.getString("photo")+"",user.getString("narrator_ccp"));
+                                            if(!user.getString("licence_narrator").equals("null") && user.getInt("licence_narrator")>0){
+                                                Login.reader.contrat_reader_valide=true;
+                                            }
+                                        }
+                                        else {
                                             if (!user.getString("id_reader").equals("null")){
-                                                Login.reader=new ReaderFull(user.getInt("id_reader"),user.getString("nom")+"","",user.getString("nom")+"",user.getString("mdp")+"","","");
+                                                Login.reader=new ReaderFull(user.getInt("id_reader"),user.getString("nom")+"","",user.getString("nom")+"",user.getString("mdp")+"",user.getString("nation")+"",user.getString("photo")+"");
                                                 if(!user.getString("licence_reader").equals("null") && user.getInt("licence_reader")>0){
                                                     Login.reader.contrat_reader_valide=true;
                                                 }
@@ -272,13 +285,9 @@ public class User {
                                         }
                                         //endregion
 
-                                        //region testé si le user est un narrator
-                                        if (!user.getString("id_narrator").equals("null")){
-                                            Login.narrator=new Narrator(user.getInt("id_narrator"),user.getString("nom")+"","",user.getString("nom")+"",user.getString("mdp")+"","","",user.getString("narrator_ccp"));
-                                            if(!user.getString("licence_narrator").equals("null") && user.getInt("licence_narrator")>0){
-                                                Login.reader.contrat_reader_valide=true;
-                                            }
-                                        }
+
+
+
                                         //endregion
 
                                         c.startActivity(new Intent(c,Accueil.class));
@@ -316,6 +325,43 @@ public class User {
         //endregion
     }
 
+    public void getSearchBook(int offset,String hint,PostServerRequest5.doBeforAndAfterGettingData callback){
+        HashMap<String,String> datas=new HashMap<>();
+        Login.ajax.setUrlRead("/read.php");
+
+        hint="%"+hint+"%";
+        datas.put("1",""+hint);
+        datas.put("2",""+hint);
+        datas.put("3",""+hint);
+        datas.put("4",""+hint);
+        Login.ajax.read("SELECT pub.*,b.*,u.nom  \n" +
+                "FROM   publication pub \n" +
+                "       INNER JOIN book b \n" +
+                "               ON pub.id_pub = b.id_book \n" +
+                "       INNER JOIN user u \n" +
+                "               ON u.id_user = b.id_writter \n" +
+                "WHERE  u.nom LIKE ? \n" +
+                "        OR b.nom1 LIKE ? \n" +
+                "        OR b.nom2 LIKE ? \n" +
+                "        OR b.category LIKE ? order by pub.date desc limit 60 OFFSET "+offset, datas,callback);
+    }
+
+    public void fermerClavier(AppCompatActivity c){
+        InputMethodManager imm = (InputMethodManager)c.getSystemService(INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = c.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(c);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    public void openClavier(AppCompatActivity c){
+        InputMethodManager imm = (InputMethodManager) c.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+    }
+
     public void openSelectFile(AppCompatActivity c,TypeFiles type_file){
 
         switch (type_file){
@@ -341,6 +387,32 @@ public class User {
             break;
         }
 
+    }
+
+    public void changeProfilePhoto(AppCompatActivity c,Uri file){
+        ArrayList<Uri> files=new ArrayList<>();
+        HashMap<String,String> datas=new HashMap<>();
+        Login.ajax.sendWithFiles(datas, files, c, new PostServerRequest5.doBeforAndAfterUpload() {
+            @Override
+            public void onProgress(long numBytes, long totalBytes, float percent, float speed) {
+
+            }
+
+            @Override
+            public void before() {
+
+            }
+
+            @Override
+            public void echec(Exception e) {
+
+            }
+
+            @Override
+            public void After(String result) {
+
+            }
+        });
     }
 
     public  String getFilePath(Context context, Uri uri) {

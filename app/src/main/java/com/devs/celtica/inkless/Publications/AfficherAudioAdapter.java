@@ -19,6 +19,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.devs.celtica.inkless.Activities.Login;
 import com.devs.celtica.inkless.PostServerRequest5;
 import com.devs.celtica.inkless.R;
+import com.devs.celtica.inkless.Users.Narrator;
 import com.devs.celtica.inkless.Users.Writer;
 import com.squareup.picasso.Picasso;
 
@@ -28,28 +29,28 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class AfficherBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AfficherAudioAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     AppCompatActivity c;
-    public static ArrayList<Book> books=new  ArrayList<Book>();
+    public static ArrayList<Audio> audios=new  ArrayList<>();
     public static int ItemSelected;
 
-    public AfficherBookAdapter(AppCompatActivity c) {
+    public AfficherAudioAdapter(AppCompatActivity c) {
         this.c = c;
 
     }
 
-    public static class BookView extends RecyclerView.ViewHolder  {
+    public static class AudioView extends RecyclerView.ViewHolder  {
 
-        TextView nom1;
-        TextView nom2;
-        ImageView photo;
+        TextView narrator;
+        TextView date;
+
         LinearLayout body;
-        public BookView(View v) {
+        public AudioView(View v) {
             super(v);
-            nom1=(TextView) v.findViewById(R.id.div_book_nom1);
-            nom2=(TextView)v.findViewById(R.id.div_book_nom2);
-            photo=(ImageView)v.findViewById(R.id.div_book_photo);
+            narrator=(TextView) v.findViewById(R.id.divAudio_narrator);
+            date=(TextView) v.findViewById(R.id.divAudio_date);
+
             //body=(LinearLayout)v.findViewById(R.id.body);
 
         }
@@ -69,8 +70,8 @@ public class AfficherBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         View v;
 
         if(viewType==1){
-            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.div_book,parent,false);
-            BookView vh = new BookView(v);
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.div_audio_accueil,parent,false);
+            AudioView vh = new AudioView(v);
             return vh;
         }else {
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.div_add_plus2_butt,parent,false);
@@ -85,46 +86,17 @@ public class AfficherBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
 
 
-        if (position !=books.size()) {
-            ((BookView)holder).nom1.setText(books.get(position).nom1+"");
-            ((BookView)holder).nom2.setText(books.get(position).nom2+"");
-
-            Glide.with(c)
-                    .load(Login.ajax.url+"/"+books.get(position).photo)
-                    .thumbnail(Glide.with(c).load(R.drawable.wait))
-                    .apply(new RequestOptions().override(400, 600))
-                    .into(((BookView)holder).photo);
-
-            //region open book profile ..
-            ((BookView)holder).photo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ItemSelected=position;
-                    ProfileBook.book =books.get(position);
-                    c.startActivity(new Intent(c,ProfileBook.class));
-                }
-            });
-            //endregion
-
-            //region open upload audiio ..
-            ((BookView)holder).photo.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    ItemSelected=position;
-                    UploadAudio.book=books.get(position);
-                    c.startActivity(new Intent(c,UploadAudio.class));
-                    return false;
-                }
-            });
-            //endregion
-
+        if (position !=audios.size()) {
+             //afficher le div audio avec configuration ..
+            ((AudioView)holder).narrator.setText(((audios.get(position) instanceof AudioNarrator == true)? ((AudioNarrator)audios.get(position)).narrator.nom :((AudioWriter)audios.get(position)).writer.nom));
+            ((AudioView)holder).date.setText(audios.get(position).date_pub+"");
         }else {
-            if(books.size() % 60 == 0 && books.size() != 0){
+            if(audios.size() % 60 == 0){
                 ((AddPlusView)holder).addPlusButt.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
-                        ((Writer)Login.reader).getBooks(books.size(), new PostServerRequest5.doBeforAndAfterGettingData() {
+                        ProfileBook.book.getAllAudios(audios.size(), new PostServerRequest5.doBeforAndAfterGettingData() {
                             @Override
                             public void before() {
 
@@ -137,7 +109,7 @@ public class AfficherBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                             @Override
                             public void After(String result) {
-                                addBooks(result);
+                                addAudios(result);
                             }
                         });
                     }
@@ -157,7 +129,7 @@ public class AfficherBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemViewType(int position) {
-        if(position==books.size()){
+        if(position==audios.size()){
             return 2;
         }else {
             return 1;
@@ -167,16 +139,20 @@ public class AfficherBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemCount() {
-        return books.size()+1;
+        return audios.size()+1;
     }
 
-    public void addBooks(String JSONResult){
-        Writer auteur=new Writer(Login.reader.id_user,Login.reader.nom);
+    public void addAudios(String JSONResult){
         try {
             JSONArray r=new JSONArray(JSONResult);
             for (int i=0;i<r.length();i++){
                 JSONObject obj=r.getJSONObject(i);
-                AfficherBookAdapter.books.add(new Book(obj.getInt("id_pub"),obj.getString("lien_resume"),obj.getString("lien"),obj.getString("photo"),obj.getString("maison_edition"),obj.getString("nom1"),obj.getString("nom2"),obj.getString("category"),obj.getString("date"),auteur,true,0,0));
+                if (!obj.getString("id_writter").equals("null")){
+                    audios.add(new AudioWriter("",obj.getInt("id_pub"),ProfileBook.book.id_pub,obj.getString("date"),new Writer(obj.getInt("id_writter"),obj.getString("nom"))));
+                }else if(!obj.getString("id_narrator").equals("null")) {
+                    audios.add(new AudioNarrator("",obj.getInt("id_pub"),ProfileBook.book.id_pub,obj.getString("date"),new Narrator(obj.getInt("id_narrator"),obj.getString("nom"))));
+
+                }
             }
             c.runOnUiThread(new Runnable() {
                 @Override

@@ -85,8 +85,6 @@ public class Book extends Publication{
 
             }
 
-
-
             @Override
             public void echec(Exception e) {
                 e.printStackTrace();
@@ -127,4 +125,36 @@ public class Book extends Publication{
             }
         });
     }
+
+    public void getAllAudios(int offset ,PostServerRequest5.doBeforAndAfterGettingData callback){
+        HashMap<String,String> datas=new HashMap<>();
+        datas.put("1",id_pub+"");
+        Login.ajax.read("SELECT p.id_pub, \n" +
+                "       p.date, \n" +
+                "       p.approuver, \n" +
+                "       audio.NAME, \n" +
+                "       audio_writter.id_writter, \n" +
+                "       audio_narrator.id_narrator, \n" +
+                "       user.nom, \n" +
+                "       user.email \n" +
+                "FROM   audio \n" +
+                "       INNER JOIN publication p \n" +
+                "               ON audio.id_audio = p.id_pub \n" +
+                "       LEFT JOIN audio_writter \n" +
+                "              ON audio_writter.id_audio = audio.id_audio \n" +
+                "       LEFT JOIN audio_narrator \n" +
+                "              ON audio_narrator.id_audio = audio.id_audio \n" +
+                "       INNER JOIN user \n" +
+                "               ON ( audio_writter.id_writter = user.id_user \n" +
+                "                     OR audio_narrator.id_narrator = user.id_user ) \n" +
+                "WHERE  audio.id_book = ? order by id_pub desc limit 60 OFFSET "+offset,datas,callback);
+    }
+
+    public void getAudiosByWriter(String id_writer,AppCompatActivity c,PostServerRequest5.doBeforAndAfterGettingData callback){
+        HashMap<String,String> datas=new HashMap<>();
+        datas.put("1",id_pub+"");
+        datas.put("2",id_writer+"");
+        Login.ajax.read("SELECT * from publication inner JOIN audio on audio.id_audio=publication.id_pub inner join audio_writter on audio.id_audio=audio_writter.id_audio where audio.id_book=? ORDER BY publication.date desc",datas,callback);
+    }
+
 }

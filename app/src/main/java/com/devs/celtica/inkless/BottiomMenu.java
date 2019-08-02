@@ -1,9 +1,6 @@
 package com.devs.celtica.inkless;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.devs.celtica.inkless.Activities.Accueil;
-import com.devs.celtica.inkless.Activities.SearchBook;
+import com.devs.celtica.inkless.Publications.SearchBook;
 import com.devs.celtica.inkless.Users.Profile;
 
 
