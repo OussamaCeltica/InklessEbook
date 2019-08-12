@@ -48,9 +48,12 @@ public class Audio extends Publication {
 
     }
 
-    public void getTrack(){
-
+    public void getTracks(int offset ,PostServerRequest5.doBeforAndAfterGettingData callback){
+        HashMap<String,String> datas=new HashMap<>();
+        datas.put("1",id_pub+"");
+        Login.ajax.read("select * from track where id_audio=? order by idtrack desc limit 60 offset "+offset,datas,callback);
     }
+
 
     public void uploadAudio(final AppCompatActivity c,HashMap<String,String> datas ,ArrayList<TrackForUpload> tracks){
         Login.ajax.setUrlWrite("/upload_files.php");
@@ -61,7 +64,7 @@ public class Audio extends Publication {
         int i=1;
         for (TrackForUpload t:tracks) {
             if(t.isValide()){
-                datas.put("titre"+i++,t.titre);
+                datas.put("titre"+(i++),t.titre);
                 files.add(t.audioFile);
             }
         }

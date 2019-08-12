@@ -5,16 +5,24 @@
  */
 package com.devs.celtica.inkless.Users;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
+import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.devs.celtica.inkless.Activities.Accueil;
@@ -362,54 +370,109 @@ public class User {
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
     }
 
-    public void openSelectFile(AppCompatActivity c,TypeFiles type_file){
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void openSelectFile(AppCompatActivity c, TypeFiles type_file){
 
-        switch (type_file){
-            case  PDF:{
-                Intent i2=new Intent();
-                i2.setType("application/pdf");
-                i2.setAction(Intent.ACTION_GET_CONTENT);
-                c.startActivityForResult(i2,2);
+        //region storage permission
+        if (ContextCompat.checkSelfPermission(c, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+
+            //File write logic here
+            c.requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 5);
+
+        }else {
+            switch (type_file){
+                case  PDF:{
+                    Intent i2=new Intent();
+                    i2.setType("application/pdf");
+                    i2.setAction(Intent.ACTION_GET_CONTENT);
+                    c.startActivityForResult(i2,2);
+                }
+                break;
+                case AUDIO:{
+                    Intent i2=new Intent();
+                    i2.setType("audio/*");
+                    i2.setAction(Intent.ACTION_GET_CONTENT);
+                    c.startActivityForResult(i2,3);
+                }break;
+                case PHOTO:{
+                    Intent i2=new Intent();
+                    i2.setType("image/*");
+                    i2.setAction(Intent.ACTION_GET_CONTENT);
+                    c.startActivityForResult(i2,1);
+                }
+                break;
             }
-            break;
-            case AUDIO:{
-                Intent i2=new Intent();
-                i2.setType("audio/*");
-                i2.setAction(Intent.ACTION_GET_CONTENT);
-                c.startActivityForResult(i2,3);
-            }break;
-            case PHOTO:{
-                Intent i2=new Intent();
-                i2.setType("image/*");
-                i2.setAction(Intent.ACTION_GET_CONTENT);
-                c.startActivityForResult(i2,1);
-            }
-            break;
         }
+
 
     }
 
-    public void changeProfilePhoto(AppCompatActivity c,Uri file){
+    public void changeProfilePhoto(final AppCompatActivity c, Uri file){
+
+        //region configuration progressbar ..
+        AlertDialog.Builder mb = new AlertDialog.Builder(c); //c est l activity non le context ..
+
+        final View progressView= c.getLayoutInflater().inflate(R.layout.div_progressbar,null);
+
+        mb.setView(progressView);
+        final AlertDialog ad=mb.create();
+        ad.show();
+        ad.setCanceledOnTouchOutside(false); //ne pas fermer on click en dehors ..
+        ad.setCancelable(false); //désactiver le button de retour ..
+
+        final ProgressBar progressBar;
+        progressBar=(ProgressBar)progressView.findViewById(R.id.div_progressbar_bar);
+        //endregion
+
         ArrayList<Uri> files=new ArrayList<>();
         HashMap<String,String> datas=new HashMap<>();
+        Login.ajax.setUrlWrite("/upload_files.php");
+        datas.put("upload_type","user_img");
+        datas.put("id_user",id_user+"");
         Login.ajax.sendWithFiles(datas, files, c, new PostServerRequest5.doBeforAndAfterUpload() {
             @Override
             public void onProgress(long numBytes, long totalBytes, float percent, float speed) {
 
+                progressBar.setProgress((int) (percent*100));
+                TextView perrcent=(TextView)progressView.findViewById(R.id.div_progressbar_pourcent);
+                perrcent.setText(String.format("%.2f",Double.parseDouble(percent*100+""))+" %");
             }
 
             @Override
             public void before() {
 
+                ad.show();
+
             }
 
             @Override
             public void echec(Exception e) {
+                e.printStackTrace();
+                c.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(c,c.getResources().getString(R.string.uploadBook_err),Toast.LENGTH_SHORT).show();
+                    }
+                });
 
             }
 
             @Override
-            public void After(String result) {
+            public void After(final String result) {
+                ad.dismiss();
+                Log.e("pphoto",result+"");
+                c.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (result.replaceAll("\n","").trim().equals("good")){
+                            Toast.makeText(c,c.getResources().getString(R.string.uploadBook_succ),Toast.LENGTH_SHORT).show();
+
+                        }else {
+                            Toast.makeText(c,c.getResources().getString(R.string.uploadBook_err),Toast.LENGTH_SHORT).show();
+
+                        }
+                    }
+                });
 
             }
         });

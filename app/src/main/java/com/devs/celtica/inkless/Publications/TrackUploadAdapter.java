@@ -96,6 +96,7 @@ public class TrackUploadAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         //region open selection file ..
         ((AudioUploadView)holder).uploadButt.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View view) {
                 itemSelected=position;

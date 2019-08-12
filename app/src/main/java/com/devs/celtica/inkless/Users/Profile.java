@@ -74,6 +74,7 @@ public class Profile extends AppCompatActivity {
 
                     //registering popup with OnMenuItemClickListener
                     popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @RequiresApi(api = Build.VERSION_CODES.M)
                         public boolean onMenuItemClick(MenuItem item) {
                             if (item.getTitle().toString().equals(getResources().getString(R.string.profile_photoAffiche))){
 

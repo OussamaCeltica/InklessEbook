@@ -100,28 +100,25 @@ public class Book extends Publication{
             }
 
             @Override
-            public void After(String result) {
-                Log.e("rrr","upload msg: "+result+" / "+result.trim().length());
-                ((UploadPdf)c).ad.dismiss();
-                UploadPdf.isSended=false;
-                if (result.replaceAll("\n","").trim().equals("good")){
-                    //c.finish();
-                    c.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
+            public void After(final String result) {
+
+                c.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.e("rrr","upload msg: "+result+" / "+result.trim().length());
+                        ((UploadPdf)c).ad.dismiss();
+                        UploadPdf.isSended=false;
+
+                        if (result.replaceAll("\n","").trim().equals("good")){
                             Toast.makeText(c,c.getResources().getString(R.string.uploadBook_succ),Toast.LENGTH_SHORT).show();
+                        }else {
+                           Toast.makeText(c,c.getResources().getString(R.string.uploadBook_err),Toast.LENGTH_SHORT).show();
                         }
-                    });
+                    }
+                });
 
-                }else {
-                    c.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(c,c.getResources().getString(R.string.uploadBook_err),Toast.LENGTH_SHORT).show();
-                        }
-                    });
 
-                }
+
             }
         });
     }

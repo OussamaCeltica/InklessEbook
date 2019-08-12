@@ -9,9 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.bumptech.glide.Glide;
@@ -29,27 +31,27 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class AfficherAudioAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AfficherTrackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     AppCompatActivity c;
-    public static ArrayList<Audio> audios=new  ArrayList<>();
+    public static ArrayList<Track> tracks=new  ArrayList<>();
     public static int ItemSelected;
 
-    public AfficherAudioAdapter(AppCompatActivity c) {
+    public AfficherTrackAdapter(AppCompatActivity c) {
         this.c = c;
 
     }
 
-    public static class AudioView extends RecyclerView.ViewHolder  {
+    public static class TrackView extends RecyclerView.ViewHolder  {
 
-        TextView narrator;
-        TextView date;
+        TextView titre;
+        FrameLayout playButt;
         LinearLayout body;
 
-        public AudioView(View v) {
+        public TrackView(View v) {
             super(v);
-            narrator=(TextView) v.findViewById(R.id.divAudio_narrator);
-            date=(TextView) v.findViewById(R.id.divAudio_date);
+            titre=(TextView) v.findViewById(R.id.divTrack_titre);
+            playButt=(FrameLayout)v.findViewById(R.id.divTrack_playButt);
             body=(LinearLayout)v.findViewById(R.id.body);
 
         }
@@ -69,8 +71,8 @@ public class AfficherAudioAdapter extends RecyclerView.Adapter<RecyclerView.View
         View v;
 
         if(viewType==1){
-            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.div_audio_accueil,parent,false);
-            AudioView vh = new AudioView(v);
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.div_track,parent,false);
+            TrackView vh = new TrackView(v);
             return vh;
         }else {
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.div_add_plus2_butt,parent,false);
@@ -85,24 +87,22 @@ public class AfficherAudioAdapter extends RecyclerView.Adapter<RecyclerView.View
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
 
 
-        if (position !=audios.size()) {
-             //afficher le div audio avec configuration ..
-            ((AudioView)holder).narrator.setText(((audios.get(position) instanceof AudioNarrator == true)? ((AudioNarrator)audios.get(position)).narrator.nom :((AudioWriter)audios.get(position)).writer.nom));
-            ((AudioView)holder).date.setText(audios.get(position).date_pub+"");
-            ((AudioView)holder).body.setOnClickListener(new View.OnClickListener() {
+        if (position !=tracks.size()) {
+            //afficher le div audio avec configuration ..
+            ((TrackView)holder).titre.setText(tracks.get(position).titre+"");
+            ((TrackView)holder).playButt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    AfficherTracks.audioSlected=audios.get(position);
-                    c.startActivity(new Intent(c,AfficherTracks.class));
+                    Toast.makeText(c,"GOOOOD",Toast.LENGTH_SHORT).show();
                 }
             });
         }else {
-            if(audios.size() % 60 == 0 && audios.size() != 0){
+            if(tracks.size() % 60 == 0 && tracks.size() != 0){
                 ((AddPlusView)holder).addPlusButt.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
-                        ProfileBook.book.getAllAudios(audios.size(), new PostServerRequest5.doBeforAndAfterGettingData() {
+                        ProfileBook.book.getAllAudios(tracks.size(), new PostServerRequest5.doBeforAndAfterGettingData() {
                             @Override
                             public void before() {
 
@@ -115,7 +115,7 @@ public class AfficherAudioAdapter extends RecyclerView.Adapter<RecyclerView.View
 
                             @Override
                             public void After(String result) {
-                                addAudios(result);
+                                addTracks(result);
                             }
                         });
                     }
@@ -135,7 +135,7 @@ public class AfficherAudioAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemViewType(int position) {
-        if(position==audios.size()){
+        if(position==tracks.size()){
             return 2;
         }else {
             return 1;
@@ -145,20 +145,15 @@ public class AfficherAudioAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public int getItemCount() {
-        return audios.size()+1;
+        return tracks.size()+1;
     }
 
-    public void addAudios(String JSONResult){
+    public void addTracks(String JSONResult){
         try {
             JSONArray r=new JSONArray(JSONResult);
             for (int i=0;i<r.length();i++){
                 JSONObject obj=r.getJSONObject(i);
-                if (!obj.getString("id_writter").equals("null")){
-                    audios.add(new AudioWriter("",obj.getInt("id_pub"),ProfileBook.book.id_pub,obj.getString("date"),new Writer(obj.getInt("id_writter"),obj.getString("nom"))));
-                }else if(!obj.getString("id_narrator").equals("null")) {
-                    audios.add(new AudioNarrator("",obj.getInt("id_pub"),ProfileBook.book.id_pub,obj.getString("date"),new Narrator(obj.getInt("id_narrator"),obj.getString("nom"))));
-
-                }
+               tracks.add(new Track(obj.getInt("idtrack"),obj.getString("titre"),obj.getString("lien")));
             }
             c.runOnUiThread(new Runnable() {
                 @Override

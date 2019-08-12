@@ -50,7 +50,7 @@ public class Login extends AppCompatActivity {
 
         //final User user=new User("h@h","1");
         final User user=new User("a@a","1");
-       // user.connecter(Login.this);
+        user.connecter(Login.this);
 
 
         //region connecter ..

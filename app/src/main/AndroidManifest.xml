@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
-        <activity android:name=".Publications.AfficherAudio"></activity>
+        <activity android:name=".Publications.AfficherTracks"></activity>
+        <activity android:name=".Publications.AfficherAudio" />
         <activity android:name=".Publications.SearchBook" />
         <activity android:name=".Publications.OpenPdf" />
         <activity android:name=".Publications.AfficherBooks" />

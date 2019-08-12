@@ -3,7 +3,9 @@ package com.devs.celtica.inkless.Publications;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
+import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -83,9 +85,9 @@ public class UploadPdf extends AppCompatActivity {
             decription=((EditText)findViewById(R.id.uploadPdf_bookDesc));
             //endregion
 
-
             //region getResumePdf file ..
             resumeButt.setOnClickListener(new View.OnClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.M)
                 @Override
                 public void onClick(View view) {
                     Login.reader.openSelectFile(UploadPdf.this, TypeFiles.PDF);
@@ -96,6 +98,7 @@ public class UploadPdf extends AppCompatActivity {
 
             //region getCompletePdf file ..
             bookButt.setOnClickListener(new View.OnClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.M)
                 @Override
                 public void onClick(View view) {
                     Login.reader.openSelectFile(UploadPdf.this, TypeFiles.PDF);
@@ -106,6 +109,7 @@ public class UploadPdf extends AppCompatActivity {
 
             //region getphotoBook file..
             photoButt.setOnClickListener(new View.OnClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.M)
                 @Override
                 public void onClick(View view) {
                     Login.reader.openSelectFile(UploadPdf.this, TypeFiles.PHOTO);

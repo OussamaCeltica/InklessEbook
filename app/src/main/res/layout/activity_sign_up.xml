@@ -151,6 +151,7 @@
                             android:layout_marginTop="13dp"
                             android:layout_gravity="center"
                             android:gravity="center"
+                            android:clickable="false"
                             android:fontFamily="@font/font1"
                             android:button="@android:color/transparent"
                             android:textColor="@color/Black"
@@ -162,6 +163,7 @@
                             android:id="@+id/signUp_reader"
                             android:layout_width="15dp"
                             android:layout_height="15dp"
+                            android:clickable="false"
                             android:layout_marginTop="35dp"
                             android:layout_gravity="center"
                             android:fontFamily="@font/font1"
@@ -177,6 +179,7 @@
                             android:layout_width="15dp"
                             android:layout_height="15dp"
                             android:layout_marginTop="35dp"
+                            android:clickable="false"
                             android:layout_gravity="center"
                             android:fontFamily="@font/font1"
                             android:button="@android:color/transparent"
@@ -485,8 +488,6 @@
                 </LinearLayout>
             </LinearLayout>
         </ScrollView>
-
-
 
         <TextView
             android:layout_width="match_parent"
