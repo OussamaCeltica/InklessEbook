@@ -181,7 +181,7 @@ public class AccueilBooksAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             JSONArray r=new JSONArray(JsonResult);
             for (int i=0;i<r.length();i++){
                 JSONObject obj=r.getJSONObject(i);
-                books.add(new Book(obj.getInt("id_pub"),obj.getString("lien_resume"),obj.getString("lien"),obj.getString("photo"),obj.getString("maison_edition"),obj.getString("nom1"),obj.getString("nom2"),obj.getString("category"),obj.getString("date"),new Writer(3,"Ouss"),true,0,0));
+                books.add(new Book(obj.getInt("id_pub"),obj.getString("lien_resume"),obj.getString("lien"),obj.getString("photo"),obj.getString("maison_edition"),obj.getString("nom1"),obj.getString("nom2"),obj.getString("category"),obj.getString("date"),new Writer(obj.getInt("id_writter"),"Ouss"),(obj.getInt("has_papier_version") == 1 ? true : false),(obj.getInt("has_papier_version") == 1 ? obj.getDouble("prix_book") : 0),obj.getDouble("prix_pdf")));
             }
             c.runOnUiThread(new Runnable() {
                 @Override

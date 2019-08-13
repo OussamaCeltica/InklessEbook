@@ -15,6 +15,8 @@ import com.devs.celtica.inkless.Activities.Accueil;
 import com.devs.celtica.inkless.Activities.Login;
 import com.devs.celtica.inkless.PostServerRequest5;
 import com.devs.celtica.inkless.R;
+import com.devs.celtica.inkless.Users.Narrator;
+import com.devs.celtica.inkless.Users.Writer;
 import com.squareup.picasso.Picasso;
 
 public class ProfileBook extends AppCompatActivity {
@@ -52,6 +54,7 @@ public class ProfileBook extends AppCompatActivity {
                     .into(((ImageView)findViewById(R.id.profileBook_photo)));
             //endregion
 
+            //region read book ..
             ((LinearLayout)findViewById(R.id.profileBook_readButt)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -59,7 +62,9 @@ public class ProfileBook extends AppCompatActivity {
 
                 }
             });
+            //endregion
 
+            //region listen to audio ..
             ((LinearLayout)findViewById(R.id.profileBook_audioButt)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -67,6 +72,20 @@ public class ProfileBook extends AppCompatActivity {
 
                 }
             });
+            //endregion
+
+            //region Upload audio for book
+            if(Login.reader.id_user == book.auteur.id_user || Login.reader instanceof Narrator){
+                ((LinearLayout)findViewById(R.id.profile_uploadAudioButt)).setVisibility(View.VISIBLE);
+                ((LinearLayout)findViewById(R.id.profile_uploadAudioButt)).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        UploadAudio.book=book;
+                        startActivity(new Intent(ProfileBook.this,UploadAudio.class));
+                    }
+                });
+            }
+            //endregion
         }
     }
 }

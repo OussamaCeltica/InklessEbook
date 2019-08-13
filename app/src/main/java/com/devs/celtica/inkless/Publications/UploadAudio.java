@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.devs.celtica.inkless.Activities.Login;
 import com.devs.celtica.inkless.R;
+import com.devs.celtica.inkless.Users.Narrator;
 import com.devs.celtica.inkless.Users.Writer;
 
 
@@ -107,8 +108,13 @@ public class UploadAudio extends AppCompatActivity {
                     }else {
                         if (!isSended) {
                             isSended=true;
-                            AudioWriter audio=new AudioWriter(book.id_pub,(Writer)Login.reader);
-                            audio.uploadAudio(UploadAudio.this,TrackUploadAdapter.audios);
+                            if(Login.reader instanceof Writer) {
+                                AudioWriter audio = new AudioWriter(book.id_pub, (Writer) Login.reader);
+                                audio.uploadAudio(UploadAudio.this, TrackUploadAdapter.audios);
+                            }else {
+                                AudioNarrator audio = new AudioNarrator(book.id_pub, (Narrator) Login.reader);
+                                audio.uploadAudio(UploadAudio.this, TrackUploadAdapter.audios);
+                            }
                         }else {
                             ad.show();
                         }

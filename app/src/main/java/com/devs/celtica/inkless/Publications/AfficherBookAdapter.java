@@ -106,17 +106,7 @@ public class AfficherBookAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             });
             //endregion
 
-            //region open upload audiio ..
-            ((BookView)holder).photo.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    ItemSelected=position;
-                    UploadAudio.book=books.get(position);
-                    c.startActivity(new Intent(c,UploadAudio.class));
-                    return false;
-                }
-            });
-            //endregion
+
 
         }else {
             if(books.size() % 60 == 0 && books.size() != 0){
