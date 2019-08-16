@@ -1,10 +1,18 @@
 package com.devs.celtica.inkless.Publications;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
 import android.support.annotation.RequiresApi;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +20,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,13 +38,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class AfficherTrackAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     AppCompatActivity c;
-    public static ArrayList<Track> tracks=new  ArrayList<>();
+    public  ArrayList<Track> tracks=new  ArrayList<>();
     public static int ItemSelected;
+    private  MediaPlayer mediaPlayer;
 
     public AfficherTrackAdapter(AppCompatActivity c) {
         this.c = c;
@@ -93,7 +106,100 @@ public class AfficherTrackAdapter extends RecyclerView.Adapter<RecyclerView.View
             ((TrackView)holder).playButt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(c,"GOOOOD",Toast.LENGTH_SHORT).show();
+
+
+                    final ProgressDialog progress = new ProgressDialog(c); // activité non context ..
+
+                    progress.setTitle("Uploading");
+                    progress.setMessage("Please wait...");
+                    progress.show();
+
+                    //region setup media player ..
+                    mediaPlayer = new MediaPlayer();
+                    mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                        public boolean onError(MediaPlayer mp, int what, int extra) {
+                            mp.reset();
+                            return false;
+                        }
+                    });
+
+                    mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                        public void onPrepared(MediaPlayer mp) {
+
+
+
+
+                            AlertDialog.Builder mb = new AlertDialog.Builder(c); //c est l activity non le context ..
+
+                            View v= c.getLayoutInflater().inflate(R.layout.div_play_audio,null);
+                            TextView titre=(TextView) v.findViewById(R.id.divPlayAudio_titre);
+                            TextView currentTime=(TextView) v.findViewById(R.id.divPlayAudio_currentTime);
+                            TextView finalTime=(TextView) v.findViewById(R.id.divPlayAudio_finalTime);
+                            ImageView play=(ImageView) v.findViewById(R.id.divPlayAudio_play);
+                            ImageView prev=(ImageView) v.findViewById(R.id.divPlayAudio_prev);
+                            ImageView next=(ImageView) v.findViewById(R.id.divPlayAudio_next);
+
+                            SeekBar progressBar=(SeekBar)v.findViewById(R.id.divPlayAudio_progress);
+                            progressBar.setMax(mediaPlayer.getDuration());
+                            DateFormat df = new SimpleDateFormat("HH:mm:ss");
+                            String time = df.format(mediaPlayer.getDuration());
+
+
+                            finalTime.setText(time+"");
+                            mp.start();
+                            progress.dismiss();
+
+                            changeAudioState(progressBar,currentTime);
+
+                            progressBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                                @Override
+                                public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                                    if (b){
+                                        mediaPlayer.seekTo(i);
+                                    }
+                                }
+
+                                @Override
+                                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                                }
+
+                                @Override
+                                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                                }
+                            });
+
+                            titre.setText(tracks.get(position).titre+"");
+
+                            mb.setView(v);
+                            final AlertDialog ad=mb.create();
+                            ad.show();
+                            ad.setCanceledOnTouchOutside(false); //ne pas fermer on click en dehors ..
+                            ad.setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(DialogInterface dialogInterface) {
+                                    mediaPlayer.stop();
+                                }
+                            });
+
+
+                        }
+                    });
+
+                    try {
+                        Uri uri = Uri.parse("https://www.android-examples.com/wp-content/uploads/2016/04/Thunder-rumble.mp3");
+                        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                        mediaPlayer.setDataSource(c, uri);
+                        mediaPlayer.prepare();
+
+                    } catch (IllegalArgumentException e) {
+                    } catch (IllegalStateException e) {
+                    } catch (IOException e) {
+                    }
+                    //endregion
+
+
                 }
             });
         }else {
@@ -165,5 +271,23 @@ public class AfficherTrackAdapter extends RecyclerView.Adapter<RecyclerView.View
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private void changeAudioState(final SeekBar progressBar, final TextView currentTime){
+        progressBar.setProgress(mediaPlayer.getCurrentPosition());
+
+        DateFormat df = new SimpleDateFormat("HH:mm:ss");
+        String time = df.format(mediaPlayer.getCurrentPosition());
+        currentTime.setText(time+"");
+
+        if (mediaPlayer.isPlaying()){
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    changeAudioState(progressBar,currentTime);
+                }
+            }, 1000);
+        }
+
     }
 }

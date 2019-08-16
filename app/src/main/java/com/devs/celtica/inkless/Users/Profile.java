@@ -52,12 +52,14 @@ public class Profile extends AppCompatActivity {
 
             ((TextView)findViewById(R.id.profile_name)).setText(Login.reader.nom+"");
 
+
+
             //region récupéré la photo de profile ..
             Glide.with(Profile.this)
-                    .load(Login.reader.photo)
+                    .load(Login.ajax.url+"/"+Login.reader.photo)
                     .thumbnail(Glide.with(Profile.this).load(R.drawable.wait))
                     .apply(new RequestOptions().override(400, 600))
-                    .error(Glide.with(Profile.this).load(R.drawable.bg_butt_bleu_fonce))
+                    //.error(Glide.with(Profile.this).load(R.drawable.bg_butt_bleu_fonce))
                     .into(profile_image);
             //endregion
 
@@ -175,6 +177,7 @@ public class Profile extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

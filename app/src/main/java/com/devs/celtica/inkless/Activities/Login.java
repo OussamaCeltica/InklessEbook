@@ -42,7 +42,7 @@ public class Login extends AppCompatActivity {
 
         progress=new ProgressDialog(this);
 
-        ajax=new PostServerRequest5("https://testingebook.000webhostapp.com");
+        ajax=new PostServerRequest5("https://inkless.000webhostapp.com");
 
         email=(EditText)findViewById(R.id.login_email);
         mdp=(EditText)findViewById(R.id.login_mdp);

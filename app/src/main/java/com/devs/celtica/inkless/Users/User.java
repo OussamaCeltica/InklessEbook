@@ -167,6 +167,7 @@ public class User {
 
             @Override
             public void After(String result) {
+                Log.e("uuu",result+"");
 
                 try {
                     JSONArray r=new JSONArray(result);
@@ -407,75 +408,87 @@ public class User {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public void changeProfilePhoto(final AppCompatActivity c, Uri file){
 
-        //region configuration progressbar ..
-        AlertDialog.Builder mb = new AlertDialog.Builder(c); //c est l activity non le context ..
+        //region storage permission
+        if (ContextCompat.checkSelfPermission(c, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
 
-        final View progressView= c.getLayoutInflater().inflate(R.layout.div_progressbar,null);
+            //File write logic here
+            c.requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 5);
 
-        mb.setView(progressView);
-        final AlertDialog ad=mb.create();
-        ad.show();
-        ad.setCanceledOnTouchOutside(false); //ne pas fermer on click en dehors ..
-        ad.setCancelable(false); //désactiver le button de retour ..
+        }else {
 
-        final ProgressBar progressBar;
-        progressBar=(ProgressBar)progressView.findViewById(R.id.div_progressbar_bar);
-        //endregion
+            //region configuration progressbar ..
+            AlertDialog.Builder mb = new AlertDialog.Builder(c); //c est l activity non le context ..
 
-        ArrayList<Uri> files=new ArrayList<>();
-        HashMap<String,String> datas=new HashMap<>();
-        Login.ajax.setUrlWrite("/upload_files.php");
-        datas.put("upload_type","user_img");
-        datas.put("id_user",id_user+"");
-        Login.ajax.sendWithFiles(datas, files, c, new PostServerRequest5.doBeforAndAfterUpload() {
-            @Override
-            public void onProgress(long numBytes, long totalBytes, float percent, float speed) {
+            final View progressView = c.getLayoutInflater().inflate(R.layout.div_progressbar, null);
 
-                progressBar.setProgress((int) (percent*100));
-                TextView perrcent=(TextView)progressView.findViewById(R.id.div_progressbar_pourcent);
-                perrcent.setText(String.format("%.2f",Double.parseDouble(percent*100+""))+" %");
-            }
+            mb.setView(progressView);
+            final AlertDialog ad = mb.create();
+            ad.show();
+            ad.setCanceledOnTouchOutside(false); //ne pas fermer on click en dehors ..
+            ad.setCancelable(false); //désactiver le button de retour ..
 
-            @Override
-            public void before() {
+            final ProgressBar progressBar;
+            progressBar = (ProgressBar) progressView.findViewById(R.id.div_progressbar_bar);
+            //endregion
 
-                ad.show();
+            ArrayList<Uri> files = new ArrayList<>();
+            files.add(file);
+            HashMap<String, String> datas = new HashMap<>();
+            Login.ajax.setUrlWrite("/upload_files.php");
+            datas.put("upload_type", "user_img");
+            datas.put("id_user", id_user + "");
+            Login.ajax.sendWithFiles(datas, files, c, new PostServerRequest5.doBeforAndAfterUpload() {
+                @Override
+                public void onProgress(long numBytes, long totalBytes, float percent, float speed) {
 
-            }
+                    progressBar.setProgress((int) (percent * 100));
+                    TextView perrcent = (TextView) progressView.findViewById(R.id.div_progressbar_pourcent);
+                    perrcent.setText(String.format("%.2f", Double.parseDouble(percent * 100 + "")) + " %");
+                }
 
-            @Override
-            public void echec(Exception e) {
-                e.printStackTrace();
-                c.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(c,c.getResources().getString(R.string.uploadBook_err),Toast.LENGTH_SHORT).show();
-                    }
-                });
+                @Override
+                public void before() {
 
-            }
+                    ad.show();
 
-            @Override
-            public void After(final String result) {
-                ad.dismiss();
-                Log.e("pphoto",result+"");
-                c.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (result.replaceAll("\n","").trim().equals("good")){
-                            Toast.makeText(c,c.getResources().getString(R.string.uploadBook_succ),Toast.LENGTH_SHORT).show();
+                }
 
-                        }else {
-                            Toast.makeText(c,c.getResources().getString(R.string.uploadBook_err),Toast.LENGTH_SHORT).show();
-
+                @Override
+                public void echec(Exception e) {
+                    e.printStackTrace();
+                    Log.e("ppp","err: "+e.getMessage());
+                    c.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //Toast.makeText(c, c.getResources().getString(R.string.uploadBook_err), Toast.LENGTH_SHORT).show();
                         }
-                    }
-                });
+                    });
 
-            }
-        });
+                }
+
+                @Override
+                public void After(final String result) {
+                    ad.dismiss();
+                    Log.e("ppp", result + "");
+                    c.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (result.replaceAll("\n", "").trim().equals("good")) {
+                                Toast.makeText(c, c.getResources().getString(R.string.uploadBook_succ), Toast.LENGTH_SHORT).show();
+
+                            } else {
+                                Toast.makeText(c, c.getResources().getString(R.string.uploadBook_err), Toast.LENGTH_SHORT).show();
+
+                            }
+                        }
+                    });
+
+                }
+            });
+        }
     }
 
     public  String getFilePath(Context context, Uri uri) {

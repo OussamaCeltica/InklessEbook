@@ -32,7 +32,7 @@ import java.util.ArrayList;
 public class AfficherAudioAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     AppCompatActivity c;
-    public static ArrayList<Audio> audios=new  ArrayList<>();
+    public  ArrayList<Audio> audios=new  ArrayList<>();
     public static int ItemSelected;
 
     public AfficherAudioAdapter(AppCompatActivity c) {

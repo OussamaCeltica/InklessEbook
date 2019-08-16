@@ -41,7 +41,7 @@ public class AudioNarrator  extends Audio {
     public void uploadAudio(AppCompatActivity c, ArrayList<TrackForUpload> tracks){
         HashMap<String,String> datas=new HashMap<>();
         datas.put("audio_for","narrator");
-        datas.put("id_writer",""+narrator.id_user);
+        datas.put("id_narrator",""+narrator.id_user);
         super.uploadAudio(c,datas,tracks);
 
     }
